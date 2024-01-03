@@ -1,30 +1,42 @@
-import * as THREE from 'three'
-
-import { CurveModifier, CurveModifierRef, Text3D } from "@react-three/drei"
-import { useFrame } from "@react-three/fiber"
-import { useMemo, useRef } from "react"
-import { initialPoints } from './constans'
+import * as THREE from 'three';
+import { CatmullRomLine, CurveModifier, CurveModifierRef, Text3D } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from "react";
+import { initialPoints } from './constans';
 
 export const MovingText = () => {
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(initialPoints.map(point => new THREE.Vector3(...point)), true, 'centripetal'), [])
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(initialPoints.map(point => new THREE.Vector3(...point)), true, 'centripetal', 50), []);
 
-  const curveRef = useRef<CurveModifierRef>(null)
-  const meshRef = useRef<CurveModifierRef>(null)
-
+  const curveModifierRef = useRef<CurveModifierRef>(null);
+  //const meshRef = useRef<THREE.Mesh>(null);
+  const textRef = useRef<THREE.Mesh>(null);
 
   useFrame(() => {
-    if (curveRef.current) {
-      curveRef.current.moveAlongCurve(0.001);
+    if (curveModifierRef.current) {
+      curveModifierRef.current.moveAlongCurve(0.001);
     }
   });
+
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.geometry.rotateX(Math.PI)
+      textRef.current.geometry.rotateZ(Math.PI)
+      textRef.current.geometry.rotateX(Math.PI)
+    }
+  }, [textRef]);
+
   return (
-    <mesh >
-      <CurveModifier curve={curve} ref={curveRef}>
-        <Text3D font={'helvetiker_regular.typeface.json'} rotation={[0, 0, 0]} bevelEnabled={true} >
+    <mesh
+      rotation={[0, 0, 0]}
+    >
+      <CurveModifier curve={curve} ref={curveModifierRef} >
+        <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef}
+        >
           hello world!
           <meshNormalMaterial />
         </Text3D>
       </CurveModifier>
+
     </mesh>
-  )
-}
+  );
+};
