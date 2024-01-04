@@ -30,13 +30,13 @@ export const MovingText = () => {
       rotation={[0, 0, 0]}
     >
       <CurveModifier curve={curve} ref={curveModifierRef} >
-        <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef}
+        <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef} size={1} height={0.01} receiveShadow
         >
           hello world!
-          <meshNormalMaterial />
+          <meshStandardMaterial />
         </Text3D>
       </CurveModifier>
 
-    </mesh>
+    </mesh >
   );
 };
