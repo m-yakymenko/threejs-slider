@@ -9,7 +9,7 @@ export const Slide = () => {
   return (
     <mesh castShadow position={[0, 0, 2]}>
       <boxGeometry args={[2, 2, 0.1]} />
-      <meshStandardMaterial map={texture} />
+      <meshStandardMaterial opacity={0} transparent depthWrite={false} />
     </mesh>
   )
 }
