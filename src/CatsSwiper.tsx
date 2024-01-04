@@ -2,25 +2,28 @@ import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import 'swiper/css';
 import 'swiper/css/free-mode';
+import { useCatstore } from "./store";
 
 export const CatsSwiper = () => {
+  const { cats } = useCatstore.getState()
+
   return (
     <Swiper
       slidesPerView={3}
-      spaceBetween={30}
+      spaceBetween={100}
       freeMode={true}
       modules={[FreeMode]}
       className="mySwiper"
+      onSliderMove={(swiper, event) => {
+        console.log(swiper.translate, swiper);
+
+      }}
     >
-      <SwiperSlide>Slide 1</SwiperSlide>
-      <SwiperSlide>Slide 2</SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
-      <SwiperSlide>Slide 5</SwiperSlide>
-      <SwiperSlide>Slide 6</SwiperSlide>
-      <SwiperSlide>Slide 7</SwiperSlide>
-      <SwiperSlide>Slide 8</SwiperSlide>
-      <SwiperSlide>Slide 9</SwiperSlide>
+      {cats.map((cat, i) => (
+        <SwiperSlide key={i}>
+          <img src={cat.url} alt="cat" />
+        </SwiperSlide>
+      ))}
     </Swiper>
   )
 }

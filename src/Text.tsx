@@ -28,6 +28,7 @@ export const MovingText = () => {
   return (
     <mesh
       rotation={[0, 0, 0]}
+      frustumCulled
     >
       <CurveModifier curve={curve} ref={curveModifierRef} >
         <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef} size={1} height={0.01} receiveShadow

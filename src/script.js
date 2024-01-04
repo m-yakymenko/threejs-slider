@@ -1,140 +1,184 @@
 
+
 import * as THREE from 'three';
-import { TransformControls } from 'three/addons/controls/TransformControls.js';
+
 import Stats from 'three/addons/libs/stats.module.js';
-import { Flow } from 'three/addons/modifiers/CurveModifier.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
-const ACTION_SELECT = 1, ACTION_NONE = 0;
-const curveHandles = [];
-const mouse = new THREE.Vector2();
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-let stats;
-let scene,
-  camera,
-  renderer,
-  rayCaster,
-  control,
-  flow,
-  action = ACTION_NONE;
+let camera, scene, renderer, startTime, object, stats;
 
 init();
 animate();
 
 function init() {
 
+  camera = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 0.25, 16);
+
+  camera.position.set(0, 1.3, 3);
+
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(
-    40,
-    window.innerWidth / window.innerHeight,
-    1,
-    1000
-  );
-  camera.position.set(2, 2, 4);
-  camera.lookAt(scene.position);
+  // Lights
 
-  const initialPoints = [
-    { x: 1, y: 0, z: - 1 },
-    { x: 1, y: 0, z: 1 },
-    { x: - 1, y: 0, z: 1 },
-    { x: - 1, y: 0, z: - 1 },
-  ];
+  scene.add(new THREE.AmbientLight(0xcccccc));
 
-  const boxGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-  const boxMaterial = new THREE.MeshBasicMaterial();
+  const spotLight = new THREE.SpotLight(0xffffff, 60);
+  spotLight.angle = Math.PI / 5;
+  spotLight.penumbra = 0.2;
+  spotLight.position.set(2, 3, 3);
+  spotLight.castShadow = true;
+  spotLight.shadow.camera.near = 3;
+  spotLight.shadow.camera.far = 10;
+  spotLight.shadow.mapSize.width = 1024;
+  spotLight.shadow.mapSize.height = 1024;
+  scene.add(spotLight);
 
-  for (const handlePos of initialPoints) {
+  const dirLight = new THREE.DirectionalLight(0x55505a, 3);
+  dirLight.position.set(0, 3, 0);
+  dirLight.castShadow = true;
+  dirLight.shadow.camera.near = 1;
+  dirLight.shadow.camera.far = 10;
 
-    const handle = new THREE.Mesh(boxGeometry, boxMaterial);
-    handle.position.copy(handlePos);
-    curveHandles.push(handle);
-    scene.add(handle);
+  dirLight.shadow.camera.right = 1;
+  dirLight.shadow.camera.left = - 1;
+  dirLight.shadow.camera.top = 1;
+  dirLight.shadow.camera.bottom = - 1;
 
-  }
+  dirLight.shadow.mapSize.width = 1024;
+  dirLight.shadow.mapSize.height = 1024;
+  scene.add(dirLight);
 
-  const curve = new THREE.CatmullRomCurve3(
-    curveHandles.map((handle) => handle.position)
-  );
-  curve.curveType = 'centripetal';
-  curve.closed = true;
+  // ***** Clipping planes: *****
 
-  const points = curve.getPoints(50);
-  const line = new THREE.LineLoop(
-    new THREE.BufferGeometry().setFromPoints(points),
-    new THREE.LineBasicMaterial({ color: 0x00ff00 })
-  );
+  const localPlane = new THREE.Plane(new THREE.Vector3(0, - 1, 0), 0.8);
+  const globalPlane = new THREE.Plane(new THREE.Vector3(- 1, 0, 0), 0.1);
 
-  scene.add(line);
+  // Geometry
 
-  //
+  const material = new THREE.MeshPhongMaterial({
+    color: 0x80ee10,
+    shininess: 100,
+    side: THREE.DoubleSide,
 
-  const light = new THREE.DirectionalLight(0xffaa33, 3);
-  light.position.set(- 10, 10, 10);
-  scene.add(light);
-
-  const light2 = new THREE.AmbientLight(0x003973, 3);
-  scene.add(light2);
-
-  //
-
-  const loader = new FontLoader();
-  loader.load('helvetiker_regular.typeface.json', function (font) {
-
-    const geometry = new TextGeometry('Hello three.js!', {
-      font: font,
-      size: 0.2,
-      height: 0.05,
-      curveSegments: 12,
-      bevelEnabled: true,
-      bevelThickness: 0.02,
-      bevelSize: 0.01,
-      bevelOffset: 0,
-      bevelSegments: 5,
-    });
-
-    //geometry.rotateX(Math.PI);
-
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x99ffff
-    });
-
-    const objectToCurve = new THREE.Mesh(geometry, material);
-
-    flow = new Flow(objectToCurve);
-    flow.updateCurve(0, curve);
-    scene.add(flow.object3D);
+    // ***** Clipping setup (material): *****
+    clippingPlanes: [localPlane],
+    clipShadows: true
 
   });
 
-  //
+  const geometry = new THREE.TorusKnotGeometry(0.4, 0.08, 95, 20);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  object = new THREE.Mesh(geometry, material);
+  object.castShadow = true;
+  scene.add(object);
 
-  renderer.domElement.addEventListener('pointerdown', onPointerDown);
 
-  rayCaster = new THREE.Raycaster();
-  control = new TransformControls(camera, renderer.domElement);
-  control.addEventListener('dragging-changed', function (event) {
-
-    if (!event.value) {
-
-      const points = curve.getPoints(50);
-      line.geometry.setFromPoints(points);
-      flow.updateCurve(0, curve);
-
-    }
-
-  });
+  // Stats
 
   stats = new Stats();
   document.body.appendChild(stats.dom);
 
+  // Renderer
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.shadowMap.enabled = true;
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   window.addEventListener('resize', onWindowResize);
+  document.body.appendChild(renderer.domElement);
+
+  // ***** Clipping setup (renderer): *****
+  const globalPlanes = [globalPlane],
+    Empty = Object.freeze([]);
+  renderer.clippingPlanes = Empty; // GUI sets it to globalPlanes
+  renderer.localClippingEnabled = true;
+
+  // Controls
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 1, 0);
+  controls.update();
+
+  // GUI
+
+  const gui = new GUI(),
+    folderLocal = gui.addFolder('Local Clipping'),
+    propsLocal = {
+
+      get 'Enabled'() {
+
+        return renderer.localClippingEnabled;
+
+      },
+      set 'Enabled'(v) {
+
+        renderer.localClippingEnabled = v;
+
+      },
+
+      get 'Shadows'() {
+
+        return material.clipShadows;
+
+      },
+      set 'Shadows'(v) {
+
+        material.clipShadows = v;
+
+      },
+
+      get 'Plane'() {
+
+        return localPlane.constant;
+
+      },
+      set 'Plane'(v) {
+
+        localPlane.constant = v;
+
+      }
+
+    },
+
+    folderGlobal = gui.addFolder('Global Clipping'),
+    propsGlobal = {
+
+      get 'Enabled'() {
+
+        return renderer.clippingPlanes !== Empty;
+
+      },
+      set 'Enabled'(v) {
+
+        renderer.clippingPlanes = v ? globalPlanes : Empty;
+
+      },
+
+      get 'Plane'() {
+
+        return globalPlane.constant;
+
+      },
+      set 'Plane'(v) {
+
+        globalPlane.constant = v;
+
+      }
+
+    };
+
+  folderLocal.add(propsLocal, 'Enabled');
+  folderLocal.add(propsLocal, 'Shadows');
+  folderLocal.add(propsLocal, 'Plane', 0.3, 1.25);
+
+  folderGlobal.add(propsGlobal, 'Enabled');
+  folderGlobal.add(propsGlobal, 'Plane', - 0.4, 3);
+
+  // Start
+
+  startTime = Date.now();
 
 }
 
@@ -147,47 +191,21 @@ function onWindowResize() {
 
 }
 
-function onPointerDown(event) {
-
-  action = ACTION_SELECT;
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-}
-
 function animate() {
+
+  const currentTime = Date.now();
+  const time = (currentTime - startTime) / 1000;
 
   requestAnimationFrame(animate);
 
-  if (action === ACTION_SELECT) {
+  object.position.y = 0.8;
+  object.rotation.x = time * 0.5;
+  object.rotation.y = time * 0.2;
+  object.scale.setScalar(Math.cos(time) * 0.125 + 0.875);
 
-    rayCaster.setFromCamera(mouse, camera);
-    action = ACTION_NONE;
-    const intersects = rayCaster.intersectObjects(curveHandles, false);
-    if (intersects.length) {
-
-      const target = intersects[0].object;
-      control.attach(target);
-      scene.add(control);
-
-    }
-
-  }
-
-  if (flow) {
-
-    flow.moveAlongCurve(0.001);
-
-  }
-
-  render();
-
-}
-
-function render() {
-
+  stats.begin();
   renderer.render(scene, camera);
-
-  stats.update();
+  stats.end();
 
 }
+

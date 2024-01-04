@@ -7,15 +7,16 @@ function App() {
   useDownloadCats()
   return (
     <>
-      <CatsSwiper />
+      <header style={{ height: '100px' }}></header>
+      <main className='swiper-wrapper'>
+        <CatsSwiper />
+        <div className='canvas-wrapper'
+        >
+          <CanvasS />
+        </div>
+      </main>
 
-      <div
-        style={{
-          width: '300px', height: '300px'
-        }}
-      >
-        <CanvasS />
-      </div>
+
     </>
   )
 }
