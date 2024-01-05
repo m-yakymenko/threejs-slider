@@ -1,23 +1,21 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css'
 import { CatsSwiper } from './CatsSwiper'
 import { CanvasS } from './canvas'
-import { useDownloadCats } from './hooks/useDownloadCats'
+
+const queryClient = new QueryClient();
 
 function App() {
-  useDownloadCats()
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <header style={{ height: '100px' }}></header>
       <main className='swiper-wrapper'>
         <CatsSwiper />
-        <div className='canvas-wrapper'
-        >
+        <div className='canvas-wrapper'>
           <CanvasS />
         </div>
       </main>
-
-
-    </>
+    </QueryClientProvider>
   )
 }
 

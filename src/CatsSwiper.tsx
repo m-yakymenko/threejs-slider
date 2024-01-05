@@ -2,13 +2,16 @@ import { FreeMode } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import 'swiper/css';
 import 'swiper/css/free-mode';
-import { useCatstore } from "./store";
+import { useQuery } from "react-query";
+import { QueryKeys } from "./constans";
+import { API } from "./api";
+import { CatsItemType } from "./types";
 
 export const CatsSwiper = () => {
-  const { cats } = useCatstore.getState()
+  const { data: cats } = useQuery<CatsItemType[]>(QueryKeys.getCats, () => API.getCats);
 
   return (
-    <Swiper
+    cats && <Swiper
       slidesPerView={3}
       spaceBetween={100}
       freeMode={true}

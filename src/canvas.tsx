@@ -4,7 +4,7 @@ import { Canvas, } from '@react-three/fiber'
 import { OrbitControls, } from '@react-three/drei'
 import { MovingText } from './Text'
 import { WorkFrame } from './WorkFrame';
-import { PlateOfInvisibility } from './PlateOfInvisibility';
+import { PlatesOfInvisibility } from './PlateOfInvisibility';
 
 export const CanvasS = () => {
   return (
@@ -22,7 +22,7 @@ export const CanvasS = () => {
 
       {/*<Slide />*/}
       <WorkFrame />
-      <PlateOfInvisibility />
+      <PlatesOfInvisibility />
     </Canvas>
   )
 }
