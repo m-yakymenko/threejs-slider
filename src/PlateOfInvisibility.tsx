@@ -23,7 +23,7 @@ const PlateOfInvisibility = ({ width, height, position }: { width: number, heigh
   return (
     <group frustumCulled >
       <mesh castShadow position={position}>
-        <boxGeometry args={[width, height, 0.1]} />
+        <planeGeometry args={[width, height]} />
         <meshStandardMaterial
           color={0x00ff00}
         //transparent={false}

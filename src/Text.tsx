@@ -1,15 +1,25 @@
 import * as THREE from 'three';
 import { CatmullRomLine, CurveModifier, CurveModifierRef, Text3D } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { initialPoints } from './constans';
+import { useCatstore } from './store';
+
+
 
 export const MovingText = () => {
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(initialPoints.map(point => new THREE.Vector3(...point)), true, 'centripetal', 50), []);
+  const state = useThree()
+  const { height } = state.size
+  const initialPoints = [
+    [-height, 0, 0],
+    [-height, 0, -height * 2],
+    [height, 0, -height * 2],
+    [height, 0, 0],
+  ] as [number, number, number,][]
 
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(initialPoints.map(point => new THREE.Vector3(...point)), true, 'centripetal', 50), []);
   const curveModifierRef = useRef<CurveModifierRef>(null);
-  //const meshRef = useRef<THREE.Mesh>(null);
   const textRef = useRef<THREE.Mesh>(null);
+
 
   useFrame(() => {
     if (curveModifierRef.current) {
@@ -25,19 +35,26 @@ export const MovingText = () => {
     }
   }, [textRef]);
 
-  return (
-    <mesh
-      rotation={[0, 0, 0]}
-      frustumCulled
-    >
-      <CurveModifier curve={curve} ref={curveModifierRef} >
-        <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef} size={1} height={0.01} receiveShadow
-        >
-          hello world!
-          <meshStandardMaterial />
-        </Text3D>
-      </CurveModifier>
+  console.log(state.size.height, textRef);
 
-    </mesh >
+
+  return (
+    <>
+      <mesh>
+        <CurveModifier curve={curve} ref={curveModifierRef} >
+          <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef} size={height / 3} height={10} receiveShadow
+          >
+            hello world!
+            <meshStandardMaterial />
+          </Text3D>
+        </CurveModifier>
+      </mesh>
+
+      <CatmullRomLine
+        points={initialPoints}       // Array of Points
+        closed={true}                  // Default
+        curveType="centripetal"
+      />
+    </>
   );
 };

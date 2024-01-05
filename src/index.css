@@ -11,5 +11,6 @@ body,
 }
 
 body {
-  background: white;
+  /*background: white;*/
+  background: gray;
 }
