@@ -4,3 +4,11 @@ export type CatsItemType = {
   width: number,
   height: number,
 }
+
+export type SwiperDataType = {
+  slidesGrid: number[],
+  slidesSizesGrid: number[],
+  translate: number,
+  height: number,
+  spaceBetween: number,
+}

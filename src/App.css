@@ -24,9 +24,14 @@
 }
 
 .canvas-wrapper {
-  width: calc((100% / 3) + (100px * 2));
+  /*width: calc((100% / 3) + (100px * 2));*/
   pointer-events: none;
   cursor: grab;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 .canvas-wrapper,
 .swiper {
@@ -35,12 +40,4 @@
 
 .swiper-wrapper {
   position: relative;
-}
-
-.canvas-wrapper {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -0);
 }
