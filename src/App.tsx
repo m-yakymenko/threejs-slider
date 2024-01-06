@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import './App.css'
-import { CatsSwiper } from './CatsSwiper'
-import { CanvasS } from './canvas'
+import './App.css';
+import { CatsSwiper } from './CatsSwiper';
+import { CanvasS } from './canvas';
 
 const queryClient = new QueryClient();
 

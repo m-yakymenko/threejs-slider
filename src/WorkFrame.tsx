@@ -8,7 +8,7 @@ export const WorkFrame = () => {
   return (
     <group>
       {swiper?.slidesGrid.map((slide, index) => <ShadowFrame
-        position={[slide - swiper.slidesSizesGrid[index] * 1.5 - swiper.spaceBetween * 1.5, 0, 150]}
+        position={[slide - swiper.slidesSizesGrid[index] * 1.5 - swiper.spaceBetween * 1.5, 0, 100]}
         width={swiper.spaceBetween}
         height={swiper.height}
         key={index}
@@ -23,8 +23,8 @@ const ShadowFrame = ({ width, height, position }: { width: number, height: numbe
     <mesh castShadow position={position}>
       <boxGeometry args={[width, height, 1]} />
       <meshStandardMaterial
-        opacity={0} transparent
-        depthWrite={false}
+      //opacity={0} transparent
+      //depthWrite={false}
       />
     </mesh>
   )

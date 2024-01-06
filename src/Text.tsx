@@ -1,7 +1,7 @@
-import * as THREE from 'three';
 import { CatmullRomLine, CurveModifier, CurveModifierRef, Text3D } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
+import * as THREE from 'three';
 
 
 
@@ -9,10 +9,10 @@ export const MovingText = () => {
   const state = useThree()
   const { height, width } = state.size
   const initialPoints = [
-    [-width / 3, 0, -50],
+    [-width / 3, 0, -80],
     [-width / 3, 0, -width / 3 * 2],
     [width / 3, 0, -width / 3 * 2],
-    [width / 3, 0, -50],
+    [width / 3, 0, -80],
   ] as [number, number, number,][]
 
   const curve = useMemo(() => new THREE.CatmullRomCurve3(initialPoints.map(point => new THREE.Vector3(...point)), true, 'centripetal', 50), []);

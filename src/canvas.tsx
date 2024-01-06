@@ -1,13 +1,24 @@
 
+import { OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { Canvas, } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Canvas, } from '@react-three/fiber'
-import { OrbitControls, OrthographicCamera, PerspectiveCamera, Text3D, } from '@react-three/drei'
-import { MovingText } from './Text'
-import { WorkFrame } from './WorkFrame';
 import { PlatesOfInvisibility } from './PlateOfInvisibility';
-import { useRef } from 'react';
+import { MovingText } from './Text';
+import { WorkFrame } from './WorkFrame';
 
 export const CanvasS = () => {
+  const light = useRef<THREE.DirectionalLight>(null)
+
+  useEffect(() => {
+    if (light.current) {
+      light.current.shadow.mapSize.width = 5120; // default
+      light.current.shadow.mapSize.height = 5120; // default
+      light.current.shadow.camera.near = 5000.5; // default
+      light.current.shadow.camera.far = 5000; // default
+    }
+  }, [light]);
+
   return (
     <Canvas
       shadows={{ type: THREE.BasicShadowMap }}
@@ -24,7 +35,7 @@ export const CanvasS = () => {
         //pointerEvents: 'none' 
       }}>
       <OrbitControls />
-      {/*<OrthographicCamera makeDefault position={[0, 0, 500]} far={2000} />*/}
+      <OrthographicCamera makeDefault position={[0, 0, 500]} far={2000} />
       <axesHelper args={[500]} />
 
       <spotLight position={[0, 0, 10000]} angle={45} penumbra={1} decay={0} intensity={Math.PI * 100} castShadow distance={11000} color={'white'} />
