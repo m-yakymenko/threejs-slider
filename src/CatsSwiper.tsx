@@ -10,6 +10,20 @@ export const CatsSwiper = () => {
 
   const { setSwiper } = useCatstore()
 
+  const onInitResizeHandler = (swiper: any) => {
+    const { slidesGrid, slidesSizesGrid, translate, height } = swiper
+    console.log(swiper);
+
+
+    setSwiper({
+      slidesGrid,
+      slidesSizesGrid,
+      translate,
+      height,
+      spaceBetween: swiper.passedParams.spaceBetween
+    })
+  }
+
   return (
     cats && <Swiper
       slidesPerView={3}
@@ -17,21 +31,12 @@ export const CatsSwiper = () => {
       freeMode={true}
       modules={[FreeMode]}
       className="mySwiper"
+
+      onInit={onInitResizeHandler}
+      onResize={onInitResizeHandler}
+
       onSliderMove={(swiper) => {
         console.log(swiper.translate, swiper);
-      }}
-      onInit={(swiper: any) => {
-        const { slidesGrid, slidesSizesGrid, translate, height } = swiper
-        console.log(swiper);
-
-
-        setSwiper({
-          slidesGrid,
-          slidesSizesGrid,
-          translate,
-          height,
-          spaceBetween: swiper.passedParams.spaceBetween
-        })
       }}
     >
       {cats.map((cat, i) => (

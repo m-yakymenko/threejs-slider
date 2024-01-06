@@ -7,6 +7,8 @@ interface CatsState {
   setCats: (cats: CatsItemType[]) => void
   swiper: SwiperDataType | null
   setSwiper: (swiper: SwiperDataType | null) => void
+  showMeshes: boolean
+  setShowMeshes: (swiper: boolean) => void
 }
 
 export const useCatstore = create<CatsState>()(
@@ -18,6 +20,9 @@ export const useCatstore = create<CatsState>()(
 
         swiper: null,
         setSwiper: (swiper) => set(() => ({ swiper: swiper })),
+
+        showMeshes: false,
+        setShowMeshes: (showMeshes) => set(() => ({ showMeshes: showMeshes })),
       }),
       {
         name: 'bear-storage',

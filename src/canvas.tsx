@@ -5,10 +5,11 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { PlatesOfInvisibility } from './PlateOfInvisibility';
 import { MovingText } from './Text';
-import { WorkFrame } from './WorkFrame';
+import { useCatstore } from './store';
 
 export const CanvasS = () => {
   const light = useRef<THREE.DirectionalLight>(null)
+  const { showMeshes } = useCatstore()
 
   useEffect(() => {
     if (light.current) {
@@ -34,15 +35,15 @@ export const CanvasS = () => {
         height: '100%',
         //pointerEvents: 'none' 
       }}>
-      <OrbitControls />
+      {showMeshes && <OrbitControls />}
       <OrthographicCamera makeDefault position={[0, 0, 500]} far={2000} />
       <axesHelper args={[500]} />
 
-      <spotLight position={[0, 0, 10000]} angle={45} penumbra={1} decay={0} intensity={Math.PI * 100} castShadow distance={11000} color={'white'} />
+      {/*<spotLight position={[0, 0, 10000]} angle={45} penumbra={1} decay={0} intensity={Math.PI * 100} castShadow distance={11000} color={'white'} />*/}
       {/*<pointLight position={[0, 0, -500]} decay={0} intensity={1} />*/}
 
       <MovingText />
-      <WorkFrame />
+      {/*<WorkFrame />*/}
       <PlatesOfInvisibility />
 
     </Canvas>
