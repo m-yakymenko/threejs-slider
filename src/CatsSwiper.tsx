@@ -12,9 +12,6 @@ export const CatsSwiper = () => {
 
   const onInitResizeHandler = (swiper: any) => {
     const { slidesGrid, slidesSizesGrid, translate, height } = swiper
-    console.log(swiper);
-
-
     setSwiper({
       slidesGrid,
       slidesSizesGrid,

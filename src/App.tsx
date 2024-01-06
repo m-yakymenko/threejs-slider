@@ -8,6 +8,7 @@ const queryClient = new QueryClient();
 
 function App() {
   const { setShowMeshes, showMeshes } = useCatstore()
+
   return (
     <QueryClientProvider client={queryClient}>
       <header style={{ height: '100px' }}>
