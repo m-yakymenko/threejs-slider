@@ -1,18 +1,15 @@
-import { useCalculateWorldUnitFromPixels } from "./hooks/hook"
 import { useCatstore } from "./store"
 
 export const PlatesOfInvisibility = () => {
   const { swiper } = useCatstore()
-  const { worldUnitsPerPixel } = useCalculateWorldUnitFromPixels()
-  console.log(worldUnitsPerPixel);
-
 
   return (
-    <group frustumCulled >
+    <group >
       {swiper?.slidesGrid.map((slide, index) => <PlateOfInvisibility
         position={[slide - swiper.slidesSizesGrid[index] - swiper.spaceBetween, 0, 2]}
         width={swiper.slidesSizesGrid[index]}
         height={swiper.height}
+        key={index}
       />)}
     </group>
   )
@@ -26,8 +23,8 @@ const PlateOfInvisibility = ({ width, height, position }: { width: number, heigh
         <planeGeometry args={[width, height]} />
         <meshStandardMaterial
           color={0x00ff00}
-        //transparent={false}
-        //colorWrite={false}
+          transparent={false}
+          colorWrite={false}
         />
       </mesh>
     </group>

@@ -2,24 +2,22 @@ import * as THREE from 'three';
 import { CatmullRomLine, CurveModifier, CurveModifierRef, Text3D } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { useCatstore } from './store';
 
 
 
 export const MovingText = () => {
   const state = useThree()
-  const { height } = state.size
+  const { height, width } = state.size
   const initialPoints = [
-    [-height, 0, 0],
-    [-height, 0, -height * 2],
-    [height, 0, -height * 2],
-    [height, 0, 0],
+    [-width / 3, 0, -50],
+    [-width / 3, 0, -width / 3 * 2],
+    [width / 3, 0, -width / 3 * 2],
+    [width / 3, 0, -50],
   ] as [number, number, number,][]
 
   const curve = useMemo(() => new THREE.CatmullRomCurve3(initialPoints.map(point => new THREE.Vector3(...point)), true, 'centripetal', 50), []);
   const curveModifierRef = useRef<CurveModifierRef>(null);
   const textRef = useRef<THREE.Mesh>(null);
-
 
   useFrame(() => {
     if (curveModifierRef.current) {
@@ -35,14 +33,11 @@ export const MovingText = () => {
     }
   }, [textRef]);
 
-  console.log(state.size.height, textRef);
-
-
   return (
     <>
       <mesh>
         <CurveModifier curve={curve} ref={curveModifierRef} >
-          <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef} size={height / 3} height={10} receiveShadow
+          <Text3D font={'helvetiker_regular.typeface.json'} ref={textRef} size={height / 5} height={1} receiveShadow
           >
             hello world!
             <meshStandardMaterial />

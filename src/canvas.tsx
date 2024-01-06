@@ -25,8 +25,9 @@ export const CanvasS = () => {
       }}>
       <OrbitControls />
       {/*<OrthographicCamera makeDefault position={[0, 0, 500]} far={2000} />*/}
+      <axesHelper args={[500]} />
 
-      <spotLight position={[0, 0, 10000]} angle={45} penumbra={1} decay={0} intensity={Math.PI * 100} castShadow distance={10000} color={'white'} />
+      <spotLight position={[0, 0, 10000]} angle={45} penumbra={1} decay={0} intensity={Math.PI * 100} castShadow distance={11000} color={'white'} />
       {/*<pointLight position={[0, 0, -500]} decay={0} intensity={1} />*/}
 
       <MovingText />

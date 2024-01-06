@@ -10,7 +10,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <header style={{ height: '100px' }}></header>
       <main className='swiper-wrapper'>
-        {/*<CatsSwiper />*/}
+        <CatsSwiper />
         <div className='canvas-wrapper'>
           <CanvasS />
         </div>
