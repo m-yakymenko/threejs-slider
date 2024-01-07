@@ -25,7 +25,7 @@ export const useCatstore = create<CatsState>()(
         setShowMeshes: (showMeshes) => set(() => ({ showMeshes: showMeshes })),
       }),
       {
-        name: 'bear-storage',
+        name: 'cats-storage',
       },
     ),
   ),
