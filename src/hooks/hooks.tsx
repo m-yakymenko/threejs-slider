@@ -5,14 +5,12 @@ import { useCatstore } from "../store";
 import { CatsItemType } from "../types";
 
 export const useQueryCat = (): CatsItemType[] | undefined => {
-  const [cats, setCats] = useCatstore((state) => [state.cats, state.setCats])
+  const [cats, setCats] = useCatstore((state) => [state.cats, state.setCats]);
 
-  useQuery<CatsItemType[]>(
-    QueryKeys.getCats,
-    API.getCats, {
+  useQuery<CatsItemType[]>(QueryKeys.getCats, API.getCats, {
     onSuccess: (data) => setCats(data),
-    enabled: !cats.length
+    enabled: !cats.length,
   });
 
-  return cats
-}
+  return cats;
+};

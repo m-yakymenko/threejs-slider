@@ -1,3 +1,3 @@
 export const QueryKeys = {
-  getCats: 'getCats'
-} as const
+  getCats: "getCats",
+} as const;

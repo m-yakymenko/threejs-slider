@@ -1,4 +1,8 @@
-export const getPointForCircleCurve = (center: [number, number, number], radius: number, segments: number): [number, number, number,][] => {
+export const getPointForCircleCurve = (
+  center: [number, number, number],
+  radius: number,
+  segments: number,
+): [number, number, number][] => {
   const points = [];
 
   for (let i = 0; i < segments; i++) {
@@ -14,4 +18,4 @@ export const getPointForCircleCurve = (center: [number, number, number], radius:
   //points.push(points[0]);
 
   return points;
-}
+};
