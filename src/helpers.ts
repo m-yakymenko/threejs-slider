@@ -14,8 +14,5 @@ export const getPointForCircleCurve = (
     points.push([x, y, z] as [number, number, number]);
   }
 
-  // Close the curve by adding the first point to the end
-  //points.push(points[0]);
-
   return points;
 };
