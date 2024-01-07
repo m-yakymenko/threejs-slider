@@ -3,13 +3,11 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from 'three';
 import { getPointForCircleCurve } from "./helpers";
-import { useCatstore } from "./store";
 
 
-export const MovingText = memo(() => {
+export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   const [show, setshow] = useState(true);
   const state = useThree()
-  const { showMeshes } = useCatstore()
 
   const { height, width } = state.size
   const initialPoints = getPointForCircleCurve([0, 0, -width / Math.PI * 1.2], width / 2, 50)

@@ -1,13 +1,15 @@
-import { Box } from "@react-three/drei"
-import { useCatstore } from "./store"
+import { Box } from "@react-three/drei";
+import { useCatstore } from "./store";
 
 export const WorkFrame = () => {
   const { swiper, showMeshes } = useCatstore()
+  //console.log(1111);
+
 
   return (
     <group >
       {swiper?.slidesGrid.map((slide, index) => <WorkScene
-        position={[slide - swiper.slidesSizesGrid[index] - swiper.spaceBetween, 0, 2]}
+        position={[slide - swiper.slidesSizesGrid[index] - swiper.spaceBetween + swiper.translate, 0, 2]}
         width={swiper.slidesSizesGrid[index]}
         height={swiper.height}
         key={index}

@@ -28,7 +28,7 @@ export const CanvasS = () => {
       <OrthographicCamera makeDefault position={[0, 0, 500]} far={2000} />
       {showMeshes && <axesHelper args={[500]} />}
 
-      <MovingText />
+      <MovingText showMeshes={showMeshes} />
       <WorkFrame />
 
     </Canvas>
