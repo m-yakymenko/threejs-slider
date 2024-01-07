@@ -2,8 +2,8 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { CanvasS } from "./canvas/canvas";
 import { useQueryCat } from "./hooks/hooks";
-import { state } from "./store/state";
 import { useCatstore } from "./store/store";
 
 export const CatsSwiper = () => {
@@ -23,7 +23,7 @@ export const CatsSwiper = () => {
   };
 
   const onChangeHandler = (swiper: any) => {
-    state.sliderTranslate = swiper.translate;
+    //state.sliderTranslate = swiper.translate;
   };
 
   return (
@@ -46,6 +46,8 @@ export const CatsSwiper = () => {
             <img src={cat.url} alt="cat" />
           </SwiperSlide>
         ))}
+
+        <CanvasS />
       </Swiper>
     )
   );
