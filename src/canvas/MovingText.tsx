@@ -2,7 +2,7 @@ import { CatmullRomLine, CurveModifier, CurveModifierRef, Text3D } from "@react-
 import { useFrame, useThree } from "@react-three/fiber";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from 'three';
-import { getPointForCircleCurve } from "./helpers";
+import { getPointForCircleCurve } from "../helpers";
 
 
 export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {

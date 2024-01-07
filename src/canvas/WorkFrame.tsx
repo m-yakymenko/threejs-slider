@@ -1,5 +1,5 @@
 import { Box } from "@react-three/drei";
-import { useCatstore } from "./store";
+import { useCatstore } from "../store";
 
 export const WorkFrame = () => {
   const { swiper, showMeshes } = useCatstore()

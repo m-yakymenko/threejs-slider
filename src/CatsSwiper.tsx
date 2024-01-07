@@ -2,7 +2,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useQueryCat } from "./hooks/hook";
+import { useQueryCat } from "./hooks/hooks";
 import { useCatstore } from "./store";
 
 export const CatsSwiper = () => {

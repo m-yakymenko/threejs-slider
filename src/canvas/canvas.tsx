@@ -2,9 +2,9 @@
 import { OrbitControls, OrthographicCamera } from '@react-three/drei';
 import { Canvas, } from '@react-three/fiber';
 import * as THREE from 'three';
-import { MovingText } from './Text';
+import { useCatstore } from '../store';
+import { MovingText } from './MovingText';
 import { WorkFrame } from './WorkFrame';
-import { useCatstore } from './store';
 
 export const CanvasS = () => {
   const { showMeshes } = useCatstore()
