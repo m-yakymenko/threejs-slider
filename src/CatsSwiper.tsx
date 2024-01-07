@@ -3,14 +3,15 @@ import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useQueryCat } from "./hooks/hooks";
-import { useCatstore } from "./store";
+import { state } from "./store/state";
+import { useCatstore } from "./store/store";
 
 export const CatsSwiper = () => {
   const cats = useQueryCat();
 
   const { setSwiper } = useCatstore();
 
-  const onChangeHandler = (swiper: any) => {
+  const onInitHandler = (swiper: any) => {
     const { slidesGrid, slidesSizesGrid, translate, height } = swiper;
     setSwiper({
       slidesGrid,
@@ -21,6 +22,10 @@ export const CatsSwiper = () => {
     });
   };
 
+  const onChangeHandler = (swiper: any) => {
+    state.sliderTranslate = swiper.translate;
+  };
+
   return (
     cats && (
       <Swiper
@@ -29,9 +34,12 @@ export const CatsSwiper = () => {
         freeMode={true}
         modules={[FreeMode]}
         className="mySwiper"
-        onInit={onChangeHandler}
-        onResize={onChangeHandler}
+        onInit={onInitHandler}
+        onResize={onInitHandler}
         onSliderMove={onChangeHandler}
+        onSlideChangeTransitionEnd={onChangeHandler}
+        onScroll={onChangeHandler}
+        onTransitionEnd={onChangeHandler}
       >
         {cats.map((cat, i) => (
           <SwiperSlide key={i}>

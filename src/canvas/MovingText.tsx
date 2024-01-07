@@ -12,6 +12,7 @@ import { getPointForCircleCurve } from "../helpers";
 export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   const [show, setshow] = useState(true);
   const state = useThree();
+  console.log(11111);
 
   const { height, width } = state.size;
   const initialPoints = getPointForCircleCurve(

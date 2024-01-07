@@ -1,7 +1,7 @@
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { useCatstore } from "../store";
+import { useCatstore } from "../store/store";
 import { MovingText } from "./MovingText";
 import { WorkFrame } from "./WorkFrame";
 

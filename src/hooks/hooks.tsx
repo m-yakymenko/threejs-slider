@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { API } from "../api";
 import { QueryKeys } from "../constans";
-import { useCatstore } from "../store";
+import { useCatstore } from "../store/store";
 import { CatsItemType } from "../types";
 
 export const useQueryCat = (): CatsItemType[] | undefined => {

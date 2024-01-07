@@ -1,19 +1,27 @@
 import { Box } from "@react-three/drei";
-import { useCatstore } from "../store";
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import { Group } from "three";
+import { state } from "../store/state";
+import { useCatstore } from "../store/store";
 
 export const WorkFrame = () => {
   const { swiper, showMeshes } = useCatstore();
   //console.log(1111);
+  const groupRef = useRef<Group>(null);
+
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.position.setX(state.sliderTranslate);
+    }
+  });
 
   return (
-    <group>
+    <group ref={groupRef}>
       {swiper?.slidesGrid.map((slide, index) => (
         <WorkScene
           position={[
-            slide -
-              swiper.slidesSizesGrid[index] -
-              swiper.spaceBetween +
-              swiper.translate,
+            slide - swiper.slidesSizesGrid[index] - swiper.spaceBetween,
             0,
             2,
           ]}
