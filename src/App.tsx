@@ -2,23 +2,17 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import styled, { ThemeProvider } from "styled-components";
 import { CatsSwiper } from "./Slider";
 import { CanvasS } from "./canvas/canvas";
-import { useCatstore } from "./store/store";
+import { Header } from "./components/Header";
 import "./styles/App.css";
 import { theme } from "./styles/theme";
 
 const queryClient = new QueryClient();
 
 function App() {
-  const { setShowMeshes, showMeshes } = useCatstore();
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <header style={{ height: "10vh", position: "relative", zIndex: 1 }}>
-          <button onClick={() => setShowMeshes(!showMeshes)}>
-            Show meshes
-          </button>
-        </header>
+        <Header />
         <MainWrapper>
           <CatsSwiper />
         </MainWrapper>

@@ -65,7 +65,7 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
         <mesh>
           <CurveModifier curve={curve} ref={curveModifierRef}>
             <Text3D
-              font={"helvetiker_regular.typeface.json"}
+              font={"Noto_Sans_ExtraBold_Regular.json"}
               ref={textRef}
               size={height / 5}
               height={1}
