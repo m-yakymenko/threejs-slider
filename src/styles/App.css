@@ -1,4 +1,10 @@
 .swiper-wrapper {
   position: relative;
   cursor: grab;
+  z-index: 1;
+}
+
+#image-fs-wrapper-portal {
+  inset: 0;
+  position: absolute;
 }

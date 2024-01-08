@@ -1,7 +1,9 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css/core";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
+import { ImageFs } from "./ImageFs";
 import { useQueryCat } from "./hooks/hooks";
 import { state } from "./store/state";
 import { useCatstore } from "./store/store";
@@ -19,8 +21,6 @@ export const CatsSwiper = () => {
   const sliredRef = useRef<any>(null);
 
   const onInitHandler = () => {
-    console.log(sliredRef);
-
     observer.observe(
       document.querySelector<HTMLUListElement>(".splide__list")!,
       {
@@ -69,13 +69,37 @@ export const CatsSwiper = () => {
       >
         {cats.map((cat, i) => (
           <SplideSlide key={i}>
-            <ImageWrapper>
-              <img src={cat.url} alt="cat" />
-            </ImageWrapper>
+            <SlideImage url={cat.url}></SlideImage>
           </SplideSlide>
         ))}
       </Splide>
     )
+  );
+};
+
+const SlideImage = ({ url }: { url: string }) => {
+  const [imgRect, setimgRect] = useState<DOMRect | null>(null);
+
+  return (
+    <ImageWrapper>
+      <img
+        src={url}
+        alt="cat"
+        onClick={(event) => {
+          setimgRect(() => {
+            console.log(event);
+
+            return (event.target as HTMLImageElement).getClientRects()[0];
+          });
+        }}
+      />
+
+      {imgRect &&
+        createPortal(
+          <ImageFs src={url} rect={imgRect} destroy={() => setimgRect(null)} />,
+          document.getElementById("image-fs-wrapper-portal")!,
+        )}
+    </ImageWrapper>
   );
 };
 
@@ -87,7 +111,6 @@ const ImageWrapper = styled.div`
   height: ${({ theme }) => theme.sizes.sliderHeight};
 
   & img {
-    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;

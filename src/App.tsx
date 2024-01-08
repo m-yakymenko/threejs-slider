@@ -14,7 +14,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <header style={{ height: "100px" }}>
+        <header style={{ height: "10vh", position: "relative", zIndex: 1 }}>
           <button onClick={() => setShowMeshes(!showMeshes)}>
             Show meshes
           </button>
@@ -23,6 +23,7 @@ function App() {
           <CatsSwiper />
           <CanvasS />
         </main>
+        <div id="image-fs-wrapper-portal"></div>
       </ThemeProvider>
     </QueryClientProvider>
   );
