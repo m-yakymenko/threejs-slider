@@ -5,8 +5,8 @@ import { Group } from "three";
 import { state } from "../store/state";
 import { useCatstore } from "../store/store";
 
-export const WorkFrame = () => {
-  const { swiper, showMeshes, imgRect } = useCatstore();
+export const WorkScenes = () => {
+  const { slider, showMeshes, imgRect } = useCatstore();
   const groupRef = useRef<Group>(null);
 
   useFrame(() => {
@@ -17,18 +17,18 @@ export const WorkFrame = () => {
 
   return (
     <group ref={groupRef}>
-      {swiper?.slidesGrid.map((slide, index) => (
+      {slider?.slidesGrid.map((slide, index) => (
         <WorkScene
           position={[
-            slide - swiper.slidesSizesGrid[index] - swiper.spaceBetween,
+            slide - slider.slidesSizesGrid[index] - slider.spaceBetween,
             0,
             2,
           ]}
-          width={swiper.slidesSizesGrid[index]}
-          height={swiper.height}
+          width={slider.slidesSizesGrid[index]}
+          height={slider.height}
           key={index}
           showMeshes={showMeshes}
-          isImageFs={!!imgRect}
+          shiftMultiplier={imgRect ? 0 : 1}
         />
       ))}
     </group>
@@ -40,15 +40,14 @@ const WorkScene = ({
   height,
   position,
   showMeshes,
-  isImageFs,
+  shiftMultiplier,
 }: {
   width: number;
   height: number;
   position: [number, number, number];
   showMeshes: boolean;
-  isImageFs: boolean;
+  shiftMultiplier: number;
 }) => {
-  const isImageFsNum = isImageFs ? 0 : 1;
   return (
     <group>
       <mesh castShadow position={position}>
@@ -66,16 +65,15 @@ const WorkScene = ({
         position={[
           position[0] - width / 2,
           position[1],
-          position[2] + (width / 2) * isImageFsNum,
+          position[2] + (width / 2) * shiftMultiplier,
         ]}
-        rotation={[0, (Math.PI / 2) * isImageFsNum, 0]}
+        rotation={[0, (Math.PI / 2) * shiftMultiplier, 0]}
       >
         <boxGeometry args={[width, height, 1]} />
         <meshStandardMaterial
-          transparent={!isImageFs}
+          transparent={!!shiftMultiplier}
           opacity={showMeshes ? 1 : 0}
           colorWrite={showMeshes}
-          depthWrite={true}
         />
       </mesh>
 
@@ -85,18 +83,19 @@ const WorkScene = ({
         position={[
           position[0] + width / 2,
           position[1],
-          position[2] + (width / 2) * isImageFsNum,
+          position[2] + (width / 2) * shiftMultiplier,
         ]}
-        rotation={[0, (Math.PI / 2) * isImageFsNum, 0]}
+        rotation={[0, (Math.PI / 2) * shiftMultiplier, 0]}
       >
         <boxGeometry args={[width, height, 1]} />
         <meshStandardMaterial
-          transparent={!isImageFs}
+          transparent={!!shiftMultiplier}
           opacity={showMeshes ? 1 : 0}
           colorWrite={showMeshes}
         />
       </mesh>
 
+      {/* scene light */}
       <pointLight
         position={[position[0], position[1], position[2] + width * 0.9]}
         intensity={40000000}

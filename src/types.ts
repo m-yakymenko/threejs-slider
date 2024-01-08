@@ -5,7 +5,7 @@ export type CatsItemType = {
   height: number;
 };
 
-export type SwiperDataType = {
+export type SliderDataType = {
   slidesGrid: number[];
   slidesSizesGrid: number[];
   translate: number;

@@ -4,9 +4,9 @@ import styled from "styled-components";
 import * as THREE from "three";
 import { useCatstore } from "../store/store";
 import { MovingText } from "./MovingText";
-import { WorkFrame } from "./WorkFrame";
+import { WorkScenes } from "./WorkScenes";
 
-export const CanvasS = () => {
+export const CanvasLayout = () => {
   const { showMeshes } = useCatstore();
 
   return (
@@ -24,12 +24,17 @@ export const CanvasS = () => {
           pointerEvents: showMeshes ? "auto" : "none",
         }}
       >
-        {showMeshes && <OrbitControls />}
         <OrthographicCamera makeDefault position={[0, 0, 500]} far={5000} />
-        {showMeshes && <axesHelper args={[500]} />}
+
+        {showMeshes && (
+          <>
+            <OrbitControls />
+            <axesHelper args={[500]} />
+          </>
+        )}
 
         <MovingText showMeshes={showMeshes} />
-        <WorkFrame />
+        <WorkScenes />
       </Canvas>
     </CanvasWrapper>
   );

@@ -15,10 +15,10 @@ const sliderPositionObserver = new MutationObserver(([{ target }]) => {
   state.position = value ? parseFloat(value) : 0;
 });
 
-export const CatsSwiper = () => {
+export const CatsSlider = () => {
   const cats = useQueryCat();
 
-  const { setSwiper } = useCatstore();
+  const { setSlider } = useCatstore();
   const sliredRef = useRef<typeof Splide>(null);
 
   const onReadyHandler = () => {
@@ -31,7 +31,7 @@ export const CatsSwiper = () => {
 
     // hack because slider is empty when onReady
     setTimeout(() => {
-      setSwiper({
+      setSlider({
         slidesGrid: sliredRef.current.slides.map(
           (slide: HTMLLIElement, index: number) =>
             slide.clientWidth * index + sliredRef.current.options.gap * index,
