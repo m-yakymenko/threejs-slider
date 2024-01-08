@@ -9,6 +9,8 @@ interface CatsState {
   setSwiper: (swiper: SwiperDataType | null) => void;
   showMeshes: boolean;
   setShowMeshes: (swiper: boolean) => void;
+  imgRect: DOMRect | null;
+  setImgRect: (imgRect: DOMRect | null) => void;
 }
 
 export const useCatstore = create<CatsState>()(
@@ -23,9 +25,18 @@ export const useCatstore = create<CatsState>()(
 
         showMeshes: false,
         setShowMeshes: (showMeshes) => set(() => ({ showMeshes: showMeshes })),
+
+        imgRect: null,
+        setImgRect: (imgRect) => set(() => ({ imgRect: imgRect })),
       }),
       {
         name: "cats-storage",
+        partialize: (state) =>
+          Object.fromEntries(
+            Object.entries(state).filter(
+              ([key]) => !["showMeshes", "imgRect"].includes(key),
+            ),
+          ),
       },
     ),
   ),

@@ -78,20 +78,21 @@ export const CatsSwiper = () => {
 };
 
 const SlideImage = ({ url }: { url: string }) => {
+  const { setImgRect } = useCatstore();
   const [imgRect, setimgRect] = useState<DOMRect | null>(null);
+
+  useEffect(() => {
+    setImgRect(imgRect);
+  }, [imgRect, setImgRect]);
 
   return (
     <ImageWrapper>
       <img
         src={url}
         alt="cat"
-        onClick={(event) => {
-          setimgRect(() => {
-            console.log(event);
-
-            return (event.target as HTMLImageElement).getClientRects()[0];
-          });
-        }}
+        onClick={(event) =>
+          setimgRect((event.target as HTMLImageElement).getClientRects()[0])
+        }
       />
 
       {imgRect &&

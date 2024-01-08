@@ -39,8 +39,8 @@ const CanvasWrapper = styled.div`
   pointer-events: none;
   cursor: grab;
   position: absolute;
-  z-index: 1;
-  top: 0;
+  z-index: 3;
+  top: 10vh;
   left: 0;
   right: 0;
   height: ${({ theme }) => theme.sizes.sliderHeight};

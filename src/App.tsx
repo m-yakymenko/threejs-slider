@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { CatsSwiper } from "./Slider";
 import { CanvasS } from "./canvas/canvas";
 import { useCatstore } from "./store/store";
@@ -19,14 +19,25 @@ function App() {
             Show meshes
           </button>
         </header>
-        <main className="swiper-wrapper">
+        <MainWrapper>
           <CatsSwiper />
-          <CanvasS />
-        </main>
-        <div id="image-fs-wrapper-portal"></div>
+        </MainWrapper>
+        <CanvasS />
+        <ImageFsWrapperPortal id="image-fs-wrapper-portal" />
       </ThemeProvider>
     </QueryClientProvider>
   );
 }
 
 export default App;
+
+const MainWrapper = styled.main`
+  position: relative;
+  cursor: grab;
+  z-index: 1;
+`;
+
+const ImageFsWrapperPortal = styled.div`
+  inset: 0;
+  position: absolute;
+`;
