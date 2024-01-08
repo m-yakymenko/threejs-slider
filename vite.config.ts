@@ -12,9 +12,9 @@ export default defineConfig(({ command }) => {
     },
   };
 
-  if (command !== "serve") {
-    config.base = "/threejs-vite/";
-  }
+  //if (command !== "serve") {
+  //  config.base = "/threejs-vite/";
+  //}
 
   return config;
 });
