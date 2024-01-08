@@ -14,11 +14,13 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   const state = useThree();
 
   const { height, width } = state.size;
-  const initialPoints = getPointForCircleCurve(
-    [0, 0, (-width / Math.PI) * 1.2],
-    width / 2,
-    50,
-  );
+  const textCircleCenter: [number, number, number] = [
+    0,
+    0,
+    (-width / Math.PI) * 1.2,
+  ];
+
+  const initialPoints = getPointForCircleCurve(textCircleCenter, width / 2, 50);
 
   const curve = useMemo(
     () =>
@@ -77,11 +79,13 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
 
         {showMeshes && (
           <CatmullRomLine
-            points={initialPoints} // Array of Points
-            closed={true} // Default
+            points={initialPoints}
+            closed={true}
             curveType="centripetal"
           />
         )}
+
+        <pointLight position={textCircleCenter} decay={0} intensity={1} />
       </group>
     )
   );

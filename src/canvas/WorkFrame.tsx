@@ -6,7 +6,7 @@ import { state } from "../store/state";
 import { useCatstore } from "../store/store";
 
 export const WorkFrame = () => {
-  const { swiper, showMeshes } = useCatstore();
+  const { swiper, showMeshes, imgRect } = useCatstore();
   const groupRef = useRef<Group>(null);
 
   useFrame(() => {
@@ -28,6 +28,7 @@ export const WorkFrame = () => {
           height={swiper.height}
           key={index}
           showMeshes={showMeshes}
+          isImageFs={!!imgRect}
         />
       ))}
     </group>
@@ -39,18 +40,21 @@ const WorkScene = ({
   height,
   position,
   showMeshes,
+  isImageFs,
 }: {
   width: number;
   height: number;
   position: [number, number, number];
   showMeshes: boolean;
+  isImageFs: boolean;
 }) => {
+  const isImageFsNum = isImageFs ? 0 : 1;
   return (
     <group>
       <mesh castShadow position={position}>
         <boxGeometry args={[width, height, 1]} />
         <meshStandardMaterial
-          transparent={showMeshes}
+          transparent={false}
           opacity={showMeshes ? 1 : 0}
           colorWrite={showMeshes}
         />
@@ -62,15 +66,16 @@ const WorkScene = ({
         position={[
           position[0] - width / 2,
           position[1],
-          position[2] + width / 2,
+          position[2] + (width / 2) * isImageFsNum,
         ]}
-        rotation={[0, Math.PI / 2, 0]}
+        rotation={[0, (Math.PI / 2) * isImageFsNum, 0]}
       >
         <boxGeometry args={[width, height, 1]} />
         <meshStandardMaterial
+          transparent={!isImageFs}
           opacity={showMeshes ? 1 : 0}
-          transparent={!showMeshes}
           colorWrite={showMeshes}
+          depthWrite={true}
         />
       </mesh>
 
@@ -80,13 +85,13 @@ const WorkScene = ({
         position={[
           position[0] + width / 2,
           position[1],
-          position[2] + width / 2,
+          position[2] + (width / 2) * isImageFsNum,
         ]}
-        rotation={[0, Math.PI / 2, 0]}
+        rotation={[0, (Math.PI / 2) * isImageFsNum, 0]}
       >
         <boxGeometry args={[width, height, 1]} />
         <meshStandardMaterial
-          transparent={!showMeshes}
+          transparent={!isImageFs}
           opacity={showMeshes ? 1 : 0}
           colorWrite={showMeshes}
         />
