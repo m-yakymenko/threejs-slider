@@ -66,7 +66,6 @@ const StyledWrapper = styled.div<{ $rect: DOMRect }>`
 
   & img {
     position: absolute;
-    z-index: 2;
     object-fit: cover;
     cursor: pointer;
   }

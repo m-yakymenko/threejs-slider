@@ -3,31 +3,33 @@ import "@splidejs/react-splide/css/core";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import { regExpFindPositionByPixel } from "../constans";
 import { useQueryCat } from "../hooks/hooks";
 import { state } from "../store/state";
 import { useCatstore } from "../store/store";
 import { ImageFs } from "./ImageFs";
 
-const observer = new MutationObserver(([{ target }]) => {
+const sliderPositionObserver = new MutationObserver(([{ target }]) => {
   const transform = (target as HTMLUListElement).style.transform;
-  const value = transform.match(/\((.+)px/)?.[1];
-  state.position = value ? +value : 0;
+  const value = transform.match(regExpFindPositionByPixel)?.[1];
+  state.position = value ? parseFloat(value) : 0;
 });
 
 export const CatsSwiper = () => {
   const cats = useQueryCat();
 
   const { setSwiper } = useCatstore();
-  const sliredRef = useRef<any>(null);
+  const sliredRef = useRef<typeof Splide>(null);
 
-  const onInitHandler = () => {
-    observer.observe(
+  const onReadyHandler = () => {
+    sliderPositionObserver.observe(
       document.querySelector<HTMLUListElement>(".splide__list")!,
       {
         attributes: true,
       },
     );
 
+    // hack because slider is empty when onReady
     setTimeout(() => {
       setSwiper({
         slidesGrid: sliredRef.current.slides.map(
@@ -46,35 +48,31 @@ export const CatsSwiper = () => {
 
   useEffect(() => {
     return () => {
-      observer.disconnect();
+      sliderPositionObserver.disconnect();
     };
   }, []);
 
+  if (!cats?.length) return null;
+
   return (
-    cats && (
-      <Splide
-        ref={sliredRef}
-        style={{
-          position: "relative",
-          cursor: "grab",
-        }}
-        options={{
-          perPage: 3,
-          gap: window.innerWidth / 10,
-          pagination: false,
-          arrows: false,
-          drag: "free",
-        }}
-        onReady={onInitHandler}
-        onResize={onInitHandler}
-      >
-        {cats.map((cat, i) => (
-          <SplideSlide key={i}>
-            <SlideImage url={cat.url}></SlideImage>
-          </SplideSlide>
-        ))}
-      </Splide>
-    )
+    <Splide
+      ref={sliredRef}
+      options={{
+        perPage: 3,
+        gap: window.innerWidth / 10,
+        pagination: false,
+        arrows: false,
+        drag: "free",
+      }}
+      onReady={onReadyHandler}
+      onResize={onReadyHandler}
+    >
+      {cats.map((cat, i) => (
+        <SplideSlide key={i}>
+          <SlideImage url={cat.url}></SlideImage>
+        </SplideSlide>
+      ))}
+    </Splide>
   );
 };
 

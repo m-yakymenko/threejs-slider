@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getPointForCircleCurve } from "../helpers";
+import { getPointsForCircleCurve } from "../helpers";
 
-const requestA = [[0, 0, 0], 50, 5] as Parameters<
-  typeof getPointForCircleCurve
->;
+const requestA: Parameters<typeof getPointsForCircleCurve> = [[0, 0, 0], 50, 5];
+
 const resultA = [
   [50, 0, 0],
   [15.450849718747373, 0, 47.552825814757675],
@@ -12,10 +11,10 @@ const resultA = [
   [15.450849718747362, 0, -47.55282581475768],
 ];
 
-describe("getPointForCircleCurve", () => {
-  const result = getPointForCircleCurve(...requestA);
+describe("getPointsForCircleCurve", () => {
+  const result = getPointsForCircleCurve(...requestA);
 
-  it("check if return right results", () => {
+  it("check if return resultA", () => {
     expect(result).toStrictEqual(resultA);
   });
 });

@@ -7,7 +7,7 @@ import {
 import { useFrame, useThree } from "@react-three/fiber";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { getPointForCircleCurve } from "../helpers";
+import { getPointsForCircleCurve } from "../helpers";
 
 export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   const [show, setshow] = useState(true);
@@ -20,7 +20,7 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   );
 
   const initialPoints = useMemo(
-    () => getPointForCircleCurve(textCircleCenter, width / 2, 50),
+    () => getPointsForCircleCurve(textCircleCenter, width / 2, 50),
     [width, textCircleCenter],
   );
 

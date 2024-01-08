@@ -12,3 +12,5 @@ export type SwiperDataType = {
   height: number;
   spaceBetween: number;
 };
+
+export type PointType = [number, number, number];

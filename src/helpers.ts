@@ -1,9 +1,11 @@
-export const getPointForCircleCurve = (
+import { PointType } from "./types";
+
+export const getPointsForCircleCurve = (
   center: [number, number, number],
   radius: number,
   segments: number,
-): [number, number, number][] => {
-  const points = [];
+): PointType[] => {
+  const points: PointType[] = [];
 
   for (let i = 0; i < segments; i++) {
     const theta = (i / segments) * Math.PI * 2;
@@ -11,7 +13,7 @@ export const getPointForCircleCurve = (
     const y = center[1];
     const z = center[2] + radius * Math.sin(theta);
 
-    points.push([x, y, z] as [number, number, number]);
+    points.push([x, y, z]);
   }
 
   return points;
