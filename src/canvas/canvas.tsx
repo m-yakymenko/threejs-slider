@@ -25,7 +25,7 @@ export const CanvasS = () => {
         }}
       >
         {showMeshes && <OrbitControls />}
-        <OrthographicCamera makeDefault position={[0, 0, 500]} far={2000} />
+        <OrthographicCamera makeDefault position={[0, 0, 500]} far={5000} />
         {showMeshes && <axesHelper args={[500]} />}
 
         <MovingText showMeshes={showMeshes} />
