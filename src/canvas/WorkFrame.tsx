@@ -102,7 +102,7 @@ const WorkScene = ({
         intensity={40000000}
         power={4000000000}
         castShadow
-        distance={width * 1.3}
+        distance={height}
         color={0xffffff}
       />
       {showMeshes && (

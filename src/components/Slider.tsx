@@ -3,10 +3,10 @@ import "@splidejs/react-splide/css/core";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import { useQueryCat } from "../hooks/hooks";
+import { state } from "../store/state";
+import { useCatstore } from "../store/store";
 import { ImageFs } from "./ImageFs";
-import { useQueryCat } from "./hooks/hooks";
-import { state } from "./store/state";
-import { useCatstore } from "./store/store";
 
 const observer = new MutationObserver(([{ target }]) => {
   const transform = (target as HTMLUListElement).style.transform;
@@ -66,6 +66,7 @@ export const CatsSwiper = () => {
           drag: "free",
         }}
         onReady={onInitHandler}
+        onResize={onInitHandler}
       >
         {cats.map((cat, i) => (
           <SplideSlide key={i}>

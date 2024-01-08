@@ -14,13 +14,15 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   const state = useThree();
 
   const { height, width } = state.size;
-  const textCircleCenter: [number, number, number] = [
-    0,
-    0,
-    (-width / Math.PI) * 1.2,
-  ];
+  const textCircleCenter: [number, number, number] = useMemo(
+    () => [0, 0, (-width / Math.PI) * 1.2],
+    [width],
+  );
 
-  const initialPoints = getPointForCircleCurve(textCircleCenter, width / 2, 50);
+  const initialPoints = useMemo(
+    () => getPointForCircleCurve(textCircleCenter, width / 2, 50),
+    [width, textCircleCenter],
+  );
 
   const curve = useMemo(
     () =>
@@ -30,7 +32,7 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
         "centripetal",
         50,
       ),
-    [],
+    [initialPoints],
   );
   const curveModifierRef = useRef<CurveModifierRef>(null);
   const textRef = useRef<THREE.Mesh>(null);

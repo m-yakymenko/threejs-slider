@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import styled, { ThemeProvider } from "styled-components";
-import { CatsSwiper } from "./Slider";
 import { CanvasS } from "./canvas/canvas";
 import { Header } from "./components/Header";
+import { CatsSwiper } from "./components/Slider";
 import "./styles/App.css";
 import { theme } from "./styles/theme";
 
