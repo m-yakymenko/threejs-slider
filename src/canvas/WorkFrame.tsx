@@ -1,19 +1,17 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
-import { useSwiper } from "swiper/react";
 import { Group } from "three";
+import { state } from "../store/state";
 import { useCatstore } from "../store/store";
 
 export const WorkFrame = () => {
   const { swiper, showMeshes } = useCatstore();
-  //console.log(1111);
   const groupRef = useRef<Group>(null);
-  const instanseSwiper = useSwiper();
 
   useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.position.setX(instanseSwiper.translate);
+      groupRef.current.position.setX(state.position);
     }
   });
 

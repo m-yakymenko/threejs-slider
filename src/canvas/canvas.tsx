@@ -1,5 +1,6 @@
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import styled from "styled-components";
 import * as THREE from "three";
 import { useCatstore } from "../store/store";
 import { MovingText } from "./MovingText";
@@ -9,7 +10,7 @@ export const CanvasS = () => {
   const { showMeshes } = useCatstore();
 
   return (
-    <div className="canvas-wrapper">
+    <CanvasWrapper>
       <Canvas
         shadows={{ type: THREE.BasicShadowMap }}
         camera={{
@@ -30,6 +31,17 @@ export const CanvasS = () => {
         <MovingText showMeshes={showMeshes} />
         <WorkFrame />
       </Canvas>
-    </div>
+    </CanvasWrapper>
   );
 };
+
+const CanvasWrapper = styled.div`
+  pointer-events: none;
+  cursor: grab;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: ${({ theme }) => theme.sizes.sliderHeight};
+`;
