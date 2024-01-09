@@ -15,4 +15,13 @@ body,
 body {
   background: rgb(243 243 243);
   font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    font-size: 12px;
+  }
 }

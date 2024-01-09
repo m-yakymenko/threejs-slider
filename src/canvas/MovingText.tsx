@@ -27,13 +27,14 @@ export const MovingText = memo(
 
     const zRotation = -Math.PI * 0.9;
     const { height, width } = state.size;
-    const fontSize = height / 5;
+    const fontSize = height / 4 - width / 25;
+    console.log(fontSize);
 
     const curveModifierRef = useRef<CurveModifierRef>(null);
     const textRef = useRef<THREE.Mesh>(null);
 
     const textCircleCenter: PointType = useMemo(
-      () => [0, shiftY * fontSize, (-width / Math.PI) * 0.9],
+      () => [0, shiftY * fontSize, (-width / Math.PI) * 0.98],
       [width, shiftY, fontSize],
     );
 
@@ -41,12 +42,14 @@ export const MovingText = memo(
       const points = getPointsForCircleCurve(textCircleCenter, width / 2.2, 50);
 
       if (spliceFrom) {
-        const end = points.splice(spliceFrom);
+        const end = points.splice(
+          Math.round(spliceFrom * (fontSize / width) * 8.5),
+        );
         return [...end, ...points];
       }
 
       return points;
-    }, [width, textCircleCenter, spliceFrom]);
+    }, [width, textCircleCenter, spliceFrom, fontSize]);
 
     const curve = useMemo(
       () =>

@@ -58,7 +58,12 @@ export const CatsSlider = () => {
     <Splide
       ref={sliredRef}
       options={{
-        perPage: 3,
+        perPage: 4,
+        breakpoints: {
+          640: {
+            perPage: 2,
+          },
+        },
         gap: window.innerWidth / 10,
         pagination: false,
         arrows: false,

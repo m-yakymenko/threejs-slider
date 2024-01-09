@@ -20,7 +20,7 @@ export const WorkScenes = () => {
       {slider?.slidesGrid.map((slide, index) => (
         <WorkScene
           position={[
-            slide - slider.slidesSizesGrid[index] - slider.spaceBetween,
+            -window.innerWidth / 2 + slider.slidesSizesGrid[index] / 2 + slide,
             0,
             2,
           ]}

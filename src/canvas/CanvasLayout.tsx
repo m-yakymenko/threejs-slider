@@ -35,15 +35,21 @@ export const CanvasLayout = () => {
 
         <MovingText
           showMeshes={showMeshes}
-          shiftY={0}
-          text="I love cats"
+          shiftY={-0.5}
+          text="I love"
           spliceFrom={0}
         />
         <MovingText
           showMeshes={showMeshes}
-          shiftY={1.2}
-          text="and Front-end"
-          spliceFrom={10}
+          shiftY={0.7}
+          text="           Cats"
+          spliceFrom={0}
+        />
+        <MovingText
+          showMeshes={showMeshes}
+          shiftY={2}
+          text="___________Front-end"
+          spliceFrom={0}
         />
         <WorkScenes />
       </Canvas>
