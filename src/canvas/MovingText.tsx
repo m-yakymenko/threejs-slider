@@ -17,12 +17,12 @@ export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
   const { height, width } = state.size;
 
   const textCircleCenter: PointType = useMemo(
-    () => [0, 0, (-width / Math.PI) * 1.2],
+    () => [0, 0, (-width / Math.PI) * 0.9],
     [width],
   );
 
   const initialPoints = useMemo(
-    () => getPointsForCircleCurve(textCircleCenter, width / 2, 50),
+    () => getPointsForCircleCurve(textCircleCenter, width / 2.5, 50),
     [width, textCircleCenter],
   );
 
