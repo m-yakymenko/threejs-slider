@@ -61,7 +61,7 @@ export const MovingText = memo(
 
     useFrame(() => {
       if (curveModifierRef.current) {
-        curveModifierRef.current.moveAlongCurve(-0.001);
+        curveModifierRef.current.moveAlongCurve(0.001);
       }
     });
 
