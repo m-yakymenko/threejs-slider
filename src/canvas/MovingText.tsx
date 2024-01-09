@@ -10,86 +10,106 @@ import * as THREE from "three";
 import { getPointsForCircleCurve } from "../helpers";
 import { PointType } from "../types";
 
-export const MovingText = memo(({ showMeshes }: { showMeshes: boolean }) => {
-  const [show, setshow] = useState(true);
-  const state = useThree();
+export const MovingText = memo(
+  ({
+    showMeshes,
+    shiftY,
+    text,
+    spliceFrom,
+  }: {
+    showMeshes: boolean;
+    shiftY: number;
+    text: string;
+    spliceFrom: number;
+  }) => {
+    const [show, setshow] = useState(true);
+    const state = useThree();
 
-  const { height, width } = state.size;
+    const zRotation = -Math.PI * 0.9;
+    const { height, width } = state.size;
+    const fontSize = height / 5;
 
-  const textCircleCenter: PointType = useMemo(
-    () => [0, 0, (-width / Math.PI) * 0.9],
-    [width],
-  );
+    const curveModifierRef = useRef<CurveModifierRef>(null);
+    const textRef = useRef<THREE.Mesh>(null);
 
-  const initialPoints = useMemo(
-    () => getPointsForCircleCurve(textCircleCenter, width / 2.5, 50),
-    [width, textCircleCenter],
-  );
+    const textCircleCenter: PointType = useMemo(
+      () => [0, shiftY * fontSize, (-width / Math.PI) * 0.9],
+      [width, shiftY, fontSize],
+    );
 
-  const curve = useMemo(
-    () =>
-      new THREE.CatmullRomCurve3(
-        initialPoints.map((point) => new THREE.Vector3(...point)),
-        true,
-        "centripetal",
-        50,
-      ),
-    [initialPoints],
-  );
+    const initialPoints = useMemo(() => {
+      const points = getPointsForCircleCurve(textCircleCenter, width / 2.2, 50);
 
-  const curveModifierRef = useRef<CurveModifierRef>(null);
-  const textRef = useRef<THREE.Mesh>(null);
+      if (spliceFrom) {
+        const end = points.splice(spliceFrom);
+        return [...end, ...points];
+      }
 
-  useFrame(() => {
-    if (curveModifierRef.current) {
-      curveModifierRef.current.moveAlongCurve(0.001);
-    }
-  });
+      return points;
+    }, [width, textCircleCenter, spliceFrom]);
 
-  useEffect(() => {
-    setshow(false);
-  }, [height, width, showMeshes]);
+    const curve = useMemo(
+      () =>
+        new THREE.CatmullRomCurve3(
+          initialPoints.map((point) => new THREE.Vector3(...point)),
+          true,
+          "centripetal",
+          50,
+        ),
+      [initialPoints],
+    );
 
-  useEffect(() => {
-    if (!show) setshow(true);
-  }, [show]);
+    useFrame(() => {
+      if (curveModifierRef.current) {
+        curveModifierRef.current.moveAlongCurve(-0.001);
+      }
+    });
 
-  useEffect(() => {
-    if (textRef.current) {
-      textRef.current.geometry.rotateX(Math.PI);
-      textRef.current.geometry.rotateZ(Math.PI);
-      textRef.current.geometry.rotateX(Math.PI);
-    }
-  }, [textRef, show]);
+    useEffect(() => {
+      setshow(false);
+    }, [height, width, showMeshes]);
 
-  if (!show) return null;
+    useEffect(() => {
+      if (!show) setshow(true);
+    }, [show]);
 
-  return (
-    <group>
-      <mesh>
-        <CurveModifier curve={curve} ref={curveModifierRef}>
-          <Text3D
-            font={"Noto_Sans_ExtraBold_Regular.json"}
-            ref={textRef}
-            size={height / 5}
-            height={1}
-            receiveShadow
-          >
-            hello world!
-            <meshStandardMaterial />
-          </Text3D>
-        </CurveModifier>
-      </mesh>
+    useEffect(() => {
+      if (textRef.current) {
+        textRef.current.geometry.rotateX(Math.PI);
+        textRef.current.geometry.rotateZ(zRotation);
+        textRef.current.geometry.rotateX(Math.PI);
+      }
+    }, [textRef, show, zRotation]);
 
-      {showMeshes && (
-        <CatmullRomLine
-          points={initialPoints}
-          closed={true}
-          curveType="centripetal"
-        />
-      )}
+    if (!show) return null;
 
-      <pointLight position={textCircleCenter} decay={0} intensity={1} />
-    </group>
-  );
-});
+    return (
+      <group rotation={[0, 0, zRotation]}>
+        <mesh>
+          <CurveModifier curve={curve} ref={curveModifierRef}>
+            <Text3D
+              font={"Noto_Sans_ExtraBold_Regular.json"}
+              ref={textRef}
+              size={fontSize}
+              height={1}
+              receiveShadow
+            >
+              {text}
+              <meshStandardMaterial />
+            </Text3D>
+          </CurveModifier>
+        </mesh>
+
+        {showMeshes && (
+          <CatmullRomLine
+            points={initialPoints}
+            closed={true}
+            curveType="centripetal"
+          />
+        )}
+
+        <pointLight position={textCircleCenter} decay={0} intensity={1} />
+      </group>
+    );
+  },
+);
