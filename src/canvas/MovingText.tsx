@@ -27,8 +27,7 @@ export const MovingText = memo(
 
     const zRotation = -Math.PI * 0.9;
     const { height, width } = state.size;
-    const fontSize = height / 4 - width / 25;
-    console.log(fontSize);
+    const fontSize = (height / 2 + width / 2) / 10;
 
     const curveModifierRef = useRef<CurveModifierRef>(null);
     const textRef = useRef<THREE.Mesh>(null);
