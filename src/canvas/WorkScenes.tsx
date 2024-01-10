@@ -1,6 +1,6 @@
 import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Group } from "three";
 import { state } from "../store/state";
 import { useCatstore } from "../store/store";
@@ -49,24 +49,21 @@ const WorkScene = ({
   showMeshes: boolean;
   shiftMultiplier: number;
 }) => {
-  //const [isHidden, setisHidden] = useState(true);
+  const [isHidden, setisHidden] = useState(true);
 
-  //useFrame(() => {
-  //  const leftX = position[0] - width / 2
-  //  const rightX = position[0] + width / 2
+  useFrame(() => {
+    const leftX = position[0] - width / 2;
+    const rightX = position[0] + width / 2;
 
-  //  const leftBound = state.position - window.innerWidth / 2
-  //  const rightBound = leftBound + window.innerWidth
+    const leftBound = Math.abs(state.position) - window.innerWidth / 2;
+    const rightBound = leftBound + window.innerWidth;
 
-  //  if (rightX >= leftBound && leftX <= rightBound) {
-  //    isHidden && setisHidden(false)
-  //  } else {
-  //    !isHidden && setisHidden(true)
-  //  }
-  //});
-
-  //if (isHidden) return null
-  //console.log(position);
+    if (rightX >= leftBound && leftX <= rightBound) {
+      isHidden && setisHidden(false);
+    } else {
+      !isHidden && setisHidden(true);
+    }
+  });
 
   return (
     <group>
@@ -121,6 +118,7 @@ const WorkScene = ({
         width={height}
         showMeshes={showMeshes}
         height={height}
+        visible={!isHidden}
       />
     </group>
   );
@@ -131,21 +129,24 @@ const SceneLight = ({
   width,
   showMeshes,
   height,
+  visible,
 }: {
   position: PointType;
   width: number;
   showMeshes: boolean;
   height: number;
+  visible: boolean;
 }) => {
   return (
     <>
       <pointLight
         position={[position[0], position[1], position[2] + width * 0.9]}
         decay={0}
-        intensity={1000}
+        intensity={10}
         castShadow
         color={0xffffff}
         distance={height * 1.2}
+        visible={visible}
       />
       {showMeshes && (
         <Box

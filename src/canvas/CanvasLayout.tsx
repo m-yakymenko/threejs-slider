@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import styled from "styled-components";
 import * as THREE from "three";
 import { useCatstore } from "../store/store";
-import { MovingText } from "./MovingText";
+import { TextLayout } from "./TextLayout";
 import { WorkScenes } from "./WorkScenes";
 
 export const CanvasLayout = () => {
@@ -33,30 +33,7 @@ export const CanvasLayout = () => {
           </>
         )}
 
-        <MovingText
-          showMeshes={showMeshes}
-          shiftY={-0.5}
-          text="I love"
-          spliceFrom={0}
-        />
-        <MovingText
-          showMeshes={showMeshes}
-          shiftY={0.7}
-          text="           Cats"
-          spliceFrom={0}
-        />
-        <MovingText
-          showMeshes={showMeshes}
-          shiftY={1.75}
-          text="___________"
-          spliceFrom={0}
-        />
-        <MovingText
-          showMeshes={showMeshes}
-          shiftY={2}
-          text="Front-end"
-          spliceFrom={15}
-        />
+        <TextLayout showMeshes={showMeshes} />
         <WorkScenes />
       </Canvas>
     </CanvasWrapper>

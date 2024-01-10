@@ -16,11 +16,13 @@ export const MovingText = memo(
     shiftY,
     text,
     spliceFrom,
+    withLight,
   }: {
     showMeshes: boolean;
     shiftY: number;
     text: string;
     spliceFrom: number;
+    withLight?: boolean;
   }) => {
     const [show, setshow] = useState(true);
     const state = useThree();
@@ -110,7 +112,9 @@ export const MovingText = memo(
           />
         )}
 
-        <pointLight position={textCircleCenter} decay={0} intensity={1} />
+        {withLight && (
+          <pointLight position={textCircleCenter} decay={0} intensity={2} />
+        )}
       </group>
     );
   },
