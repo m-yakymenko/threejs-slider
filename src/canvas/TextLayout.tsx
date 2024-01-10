@@ -12,8 +12,8 @@ export const TextLayout = ({ showMeshes }: { showMeshes: boolean }) => {
       <MovingText
         showMeshes={showMeshes}
         shiftY={0.7}
-        text="           Cats"
-        spliceFrom={0}
+        text="Cats"
+        spliceFrom={9}
       />
       <MovingText
         showMeshes={showMeshes}

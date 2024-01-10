@@ -1,8 +1,8 @@
-import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import styled from "styled-components";
 import * as THREE from "three";
 import { useCatstore } from "../store/store";
+import { CanvasHelpers } from "./CanvasHelpers";
 import { TextLayout } from "./TextLayout";
 import { WorkScenes } from "./WorkScenes";
 
@@ -16,25 +16,18 @@ export const CanvasLayout = () => {
         camera={{
           position: [0, 0, 500],
           far: 4000,
-          fov: 80,
         }}
         style={{
           width: "100%",
           height: "100%",
           pointerEvents: showMeshes ? "auto" : "none",
         }}
+        orthographic
       >
-        <OrthographicCamera makeDefault position={[0, 0, 500]} far={5000} />
-
-        {showMeshes && (
-          <>
-            <OrbitControls />
-            <axesHelper args={[500]} />
-          </>
-        )}
-
         <TextLayout showMeshes={showMeshes} />
         <WorkScenes />
+
+        {showMeshes && <CanvasHelpers />}
       </Canvas>
     </CanvasWrapper>
   );
