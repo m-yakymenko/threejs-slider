@@ -2,11 +2,12 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css/core";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { regExpFindPositionByPixel } from "../constans";
 import { useQueryCat } from "../hooks/hooks";
 import { state } from "../store/state";
 import { useCatstore } from "../store/store";
+import { theme } from "../styles/theme";
 import { ImageFs } from "./ImageFs";
 
 const sliderPositionObserver = new MutationObserver(([{ target }]) => {
@@ -84,19 +85,28 @@ export const CatsSlider = () => {
 const SlideImage = ({ url }: { url: string }) => {
   const { setImgRect } = useCatstore();
   const [imgRect, setimgRect] = useState<DOMRect | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setImgRect(imgRect);
   }, [imgRect, setImgRect]);
 
+  useEffect(() => {
+    !url && setIsLoaded(false);
+  }, [url]);
+
   return (
-    <ImageWrapper>
+    <ImageWrapper $isLoading={!isLoaded}>
       <img
         src={url}
         alt="cat"
         onClick={(event) =>
           setimgRect((event.target as HTMLImageElement).getClientRects()[0])
         }
+        style={{
+          opacity: isLoaded ? 1 : 0,
+        }}
+        onLoad={() => setIsLoaded(true)}
       />
 
       {imgRect &&
@@ -108,12 +118,22 @@ const SlideImage = ({ url }: { url: string }) => {
   );
 };
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.div<{ $isLoading: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: ${({ theme }) => theme.sizes.sliderHeight};
+  height: ${theme.sizes.sliderHeight};
+
+  ${(props) =>
+    props.$isLoading &&
+    css`
+      background: linear-gradient(
+        ${theme.primary.bgColor},
+        ${theme.primary.bgColorBright}
+      );
+      opacity: 0.4;
+    `}
 
   & img {
     width: 100%;
