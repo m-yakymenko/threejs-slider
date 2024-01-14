@@ -11,6 +11,7 @@ import { CatsStateInterface, useCatstore } from "../store/store";
 import { theme } from "../styles/theme";
 import { CatItemType } from "../types";
 import { parseNumber, randomIntFromInterval } from "../utils";
+import { FeDisplacementMap } from "./FeDisplacementMap";
 import { ImageFs } from "./ImageFs";
 
 const sliderPositionObserver = new MutationObserver(([{ target }]) => {
@@ -23,6 +24,7 @@ export const CatsSlider = () => {
   const cats = useQueryCat();
   const { setSlider, setImgRect } = useCatstore();
 
+  const [isScrolling, setIsScrolling] = useState(false);
   const sliredRef = useRef<typeof Splide>(null);
 
   const onReadyHandler = () => {
@@ -66,29 +68,34 @@ export const CatsSlider = () => {
   if (!cats?.length) return null;
 
   return (
-    <Splide
-      ref={sliredRef}
-      options={{
-        perPage: 4,
-        gap: "10vw",
-        breakpoints: {
-          640: {
-            perPage: 2,
+    <>
+      {isScrolling && <FeDisplacementMap />}
+      <Splide
+        ref={sliredRef}
+        options={{
+          perPage: 4,
+          gap: "10vw",
+          breakpoints: {
+            640: {
+              perPage: 2,
+            },
           },
-        },
-        pagination: false,
-        arrows: false,
-        drag: "free",
-      }}
-      onReady={onReadyHandler}
-      onResize={onReadyHandler}
-    >
-      {cats.map((cat, i) => (
-        <SplideSlide key={i}>
-          <SlideImage cat={cat} setImgRect={setImgRect}></SlideImage>
-        </SplideSlide>
-      ))}
-    </Splide>
+          pagination: false,
+          arrows: false,
+          drag: "free",
+        }}
+        onReady={onReadyHandler}
+        onResize={onReadyHandler}
+        onDrag={() => setIsScrolling(true)}
+        onDragged={() => setIsScrolling(false)}
+      >
+        {cats.map((cat, i) => (
+          <SplideSlide key={i}>
+            <SlideImage cat={cat} setImgRect={setImgRect}></SlideImage>
+          </SplideSlide>
+        ))}
+      </Splide>
+    </>
   );
 };
 

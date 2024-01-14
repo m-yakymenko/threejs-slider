@@ -25,3 +25,7 @@ body {
     font-size: 12px;
   }
 }
+
+.splide {
+  filter: url(#SphereMapTest);
+}
