@@ -8,7 +8,7 @@ import { useCatstore } from "../store/store";
 import { PointType } from "../types";
 
 export const WorkScenes = () => {
-  const { slider, showMeshes, imgRect } = useCatstore();
+  const { slider, showMeshes, imgRect, showFeDisplacementMap } = useCatstore();
   const groupRef = useRef<Group>(null);
 
   useFrame(() => {
@@ -35,6 +35,7 @@ export const WorkScenes = () => {
           key={index}
           showMeshes={showMeshes}
           shiftMultiplier={imgRect ? 0 : 1}
+          turnOffLight={showFeDisplacementMap}
         />
       ))}
     </group>
@@ -46,12 +47,14 @@ const WorkScene = ({
   height,
   position,
   showMeshes,
+  turnOffLight,
   shiftMultiplier,
 }: {
   width: number;
   height: number;
   position: PointType;
   showMeshes: boolean;
+  turnOffLight: boolean;
   shiftMultiplier: number;
 }) => {
   const [isHidden, setisHidden] = useState(true);
@@ -159,7 +162,7 @@ const WorkScene = ({
         width={height}
         showMeshes={showMeshes}
         height={height}
-        visible={!isHidden}
+        visible={!isHidden && !turnOffLight}
       />
     </group>
   );
@@ -183,7 +186,7 @@ const SceneLight = ({
       <pointLight
         position={[position[0], position[1], position[2] + width * 0.9]}
         decay={0}
-        intensity={10}
+        intensity={15}
         castShadow
         color={0xffffff}
         distance={height * 1.2}

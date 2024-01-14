@@ -5,6 +5,7 @@ export const theme = {
     textBtn: "white",
     text: "#373D59",
     fontFamily: '"Noto Sans", sans-serif',
+    grey: "#C8CCDD",
   },
 
   sizes: {

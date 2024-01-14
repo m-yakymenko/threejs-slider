@@ -22,7 +22,7 @@ const sliderPositionObserver = new MutationObserver(([{ target }]) => {
 
 export const CatsSlider = () => {
   const cats = useQueryCat();
-  const { setSlider, setImgRect } = useCatstore();
+  const { setSlider, setImgRect, showFeDisplacementMap } = useCatstore();
 
   const [isScrolling, setIsScrolling] = useState(false);
   const sliredRef = useRef<typeof Splide>(null);
@@ -69,7 +69,7 @@ export const CatsSlider = () => {
 
   return (
     <>
-      {isScrolling && <FeDisplacementMap />}
+      {isScrolling && showFeDisplacementMap && <FeDisplacementMap />}
       <Splide
         ref={sliredRef}
         options={{

@@ -8,9 +8,11 @@ export interface CatsStateInterface {
   slider: SliderDataType | null;
   setSlider: (slider: SliderDataType | null) => void;
   showMeshes: boolean;
-  setShowMeshes: (slider: boolean) => void;
+  setShowMeshes: (show: boolean) => void;
   imgRect: DOMRect | null;
   setImgRect: (imgRect: DOMRect | null) => void;
+  showFeDisplacementMap: boolean;
+  setShowFeDisplacementMap: (show: boolean) => void;
 }
 
 export const useCatstore = create<CatsStateInterface>()(
@@ -28,13 +30,20 @@ export const useCatstore = create<CatsStateInterface>()(
 
         imgRect: null,
         setImgRect: (imgRect) => set(() => ({ imgRect: imgRect })),
+
+        showFeDisplacementMap: false,
+        setShowFeDisplacementMap: (showFeDisplacementMap) =>
+          set(() => ({ showFeDisplacementMap: showFeDisplacementMap })),
       }),
       {
         name: "cats-storage",
         partialize: (state) =>
           Object.fromEntries(
             Object.entries(state).filter(
-              ([key]) => !["showMeshes", "imgRect"].includes(key),
+              ([key]) =>
+                !["showMeshes", "imgRect", "showFeDisplacementMap"].includes(
+                  key,
+                ),
             ),
           ),
       },
