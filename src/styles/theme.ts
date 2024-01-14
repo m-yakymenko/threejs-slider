@@ -8,6 +8,6 @@ export const theme = {
   },
 
   sizes: {
-    sliderHeight: "80vh",
+    sliderHeightVH: 80,
   },
 };

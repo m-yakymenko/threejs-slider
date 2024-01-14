@@ -1,13 +1,16 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css/core";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
 import { regExpFindPositionByPixel } from "../constans";
+import { getSlideGap, getSlideHeight } from "../helpers";
 import { useQueryCat } from "../hooks/hooks";
 import { state } from "../store/state";
-import { useCatstore } from "../store/store";
+import { CatsStateInterface, useCatstore } from "../store/store";
 import { theme } from "../styles/theme";
+import { CatItemType } from "../types";
+import { parseNumber, randomIntFromInterval } from "../utils";
 import { ImageFs } from "./ImageFs";
 
 const sliderPositionObserver = new MutationObserver(([{ target }]) => {
@@ -18,8 +21,8 @@ const sliderPositionObserver = new MutationObserver(([{ target }]) => {
 
 export const CatsSlider = () => {
   const cats = useQueryCat();
+  const { setSlider, setImgRect } = useCatstore();
 
-  const { setSlider } = useCatstore();
   const sliredRef = useRef<typeof Splide>(null);
 
   const onReadyHandler = () => {
@@ -35,14 +38,21 @@ export const CatsSlider = () => {
       setSlider({
         slidesGrid: sliredRef.current.slides.map(
           (slide: HTMLLIElement, index: number) =>
-            slide.clientWidth * index + sliredRef.current.options.gap * index,
+            slide.clientWidth * index + getSlideGap() * index,
         ),
         slidesSizesGrid: sliredRef.current.slides.map(
-          (slide: HTMLLIElement) => slide.clientWidth,
+          (slide: HTMLLIElement) => {
+            const img = slide.querySelector("img")!;
+            return {
+              width: slide.clientWidth,
+              height: img.clientHeight,
+              top: parseNumber(img.style.marginTop),
+            };
+          },
         ),
         translate: 0,
         height: window.innerHeight * 0.8,
-        spaceBetween: sliredRef.current.options.gap,
+        spaceBetween: getSlideGap(),
       });
     }, 100);
   };
@@ -60,12 +70,12 @@ export const CatsSlider = () => {
       ref={sliredRef}
       options={{
         perPage: 4,
+        gap: "10vw",
         breakpoints: {
           640: {
             perPage: 2,
           },
         },
-        gap: window.innerWidth / 10,
         pagination: false,
         arrows: false,
         drag: "free",
@@ -75,55 +85,65 @@ export const CatsSlider = () => {
     >
       {cats.map((cat, i) => (
         <SplideSlide key={i}>
-          <SlideImage url={cat.url}></SlideImage>
+          <SlideImage cat={cat} setImgRect={setImgRect}></SlideImage>
         </SplideSlide>
       ))}
     </Splide>
   );
 };
 
-const SlideImage = ({ url }: { url: string }) => {
-  const { setImgRect } = useCatstore();
-  const [imgRect, setimgRect] = useState<DOMRect | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+const SlideImage = memo(
+  ({
+    cat,
+    setImgRect,
+  }: {
+    cat: CatItemType;
+    setImgRect: CatsStateInterface["setImgRect"];
+  }) => {
+    const [imgRect, setimgRect] = useState<DOMRect | null>(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    setImgRect(imgRect);
-  }, [imgRect, setImgRect]);
+    useEffect(() => {
+      setImgRect(imgRect);
+    }, [imgRect, setImgRect]);
 
-  useEffect(() => {
-    !url && setIsLoaded(false);
-  }, [url]);
+    useEffect(() => {
+      !cat.url && setIsLoaded(false);
+    }, [cat.url]);
 
-  return (
-    <ImageWrapper $isLoading={!isLoaded}>
-      <img
-        src={url}
-        alt="cat"
-        onClick={(event) =>
-          setimgRect((event.target as HTMLImageElement).getClientRects()[0])
-        }
-        style={{
-          opacity: isLoaded ? 1 : 0,
-        }}
-        onLoad={() => setIsLoaded(true)}
-      />
+    return (
+      <ImageWrapper $isLoading={!isLoaded}>
+        <img
+          src={cat.url}
+          alt="cat"
+          onClick={(event) =>
+            setimgRect((event.target as HTMLImageElement).getClientRects()[0])
+          }
+          style={{
+            opacity: isLoaded ? 1 : 0,
+            maxHeight: cat.height,
+            marginTop: randomIntFromInterval(0, getSlideHeight() / 2),
+          }}
+          onLoad={() => setIsLoaded(true)}
+        />
 
-      {imgRect &&
-        createPortal(
-          <ImageFs src={url} rect={imgRect} destroy={() => setimgRect(null)} />,
-          document.getElementById("image-fs-wrapper-portal")!,
-        )}
-    </ImageWrapper>
-  );
-};
+        {imgRect &&
+          createPortal(
+            <ImageFs
+              src={cat.url}
+              rect={imgRect}
+              destroy={() => setimgRect(null)}
+            />,
+            document.getElementById("image-fs-wrapper-portal")!,
+          )}
+      </ImageWrapper>
+    );
+  },
+);
 
 const ImageWrapper = styled.div<{ $isLoading: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
-  height: ${theme.sizes.sliderHeight};
+  height: ${theme.sizes.sliderHeightVH}vh;
 
   ${(props) =>
     props.$isLoading &&

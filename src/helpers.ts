@@ -1,3 +1,4 @@
+import { theme } from "./styles/theme";
 import { PointType } from "./types";
 
 export const getPointsForCircleCurve = (
@@ -18,3 +19,7 @@ export const getPointsForCircleCurve = (
 
   return points;
 };
+
+export const getSlideGap = () => window.innerWidth / 10;
+export const getSlideHeight = () =>
+  (window.innerHeight * theme.sizes.sliderHeightVH) / 100;

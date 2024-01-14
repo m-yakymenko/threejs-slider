@@ -2,6 +2,7 @@ import { Box } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Group } from "three";
+import { getSlideHeight } from "../helpers";
 import { state } from "../store/state";
 import { useCatstore } from "../store/store";
 import { PointType } from "../types";
@@ -21,12 +22,16 @@ export const WorkScenes = () => {
       {slider?.slidesGrid.map((slide, index) => (
         <WorkScene
           position={[
-            -window.innerWidth / 2 + slider.slidesSizesGrid[index] / 2 + slide,
-            0,
+            -window.innerWidth / 2 +
+              slider.slidesSizesGrid[index].width / 2 +
+              slide,
+            getSlideHeight() / 2 -
+              slider.slidesSizesGrid[index].top -
+              slider.slidesSizesGrid[index].height / 2,
             2,
           ]}
-          width={slider.slidesSizesGrid[index]}
-          height={slider.height}
+          width={slider.slidesSizesGrid[index].width}
+          height={slider.slidesSizesGrid[index].height}
           key={index}
           showMeshes={showMeshes}
           shiftMultiplier={imgRect ? 0 : 1}
@@ -105,6 +110,42 @@ const WorkScene = ({
         rotation={[0, (Math.PI / 2) * shiftMultiplier, 0]}
       >
         <boxGeometry args={[height, height, 1]} />
+        <meshStandardMaterial
+          transparent={!!shiftMultiplier}
+          opacity={showMeshes ? 1 : 0}
+          colorWrite={showMeshes}
+        />
+      </mesh>
+
+      {/* top plane*/}
+      <mesh
+        castShadow
+        position={[
+          position[0],
+          position[1] + height / 2,
+          position[2] + (height / 2) * shiftMultiplier,
+        ]}
+        rotation={[(Math.PI / 2) * shiftMultiplier, 0, 0]}
+      >
+        <boxGeometry args={[width, height, 1]} />
+        <meshStandardMaterial
+          transparent={!!shiftMultiplier}
+          opacity={showMeshes ? 1 : 0}
+          colorWrite={showMeshes}
+        />
+      </mesh>
+
+      {/* bottom plane*/}
+      <mesh
+        castShadow
+        position={[
+          position[0],
+          position[1] - height / 2,
+          position[2] + (height / 2) * shiftMultiplier,
+        ]}
+        rotation={[(Math.PI / 2) * shiftMultiplier, 0, 0]}
+      >
+        <boxGeometry args={[width, height, 1]} />
         <meshStandardMaterial
           transparent={!!shiftMultiplier}
           opacity={showMeshes ? 1 : 0}

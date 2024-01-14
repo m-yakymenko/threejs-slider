@@ -4,13 +4,13 @@ import { API } from "../api";
 import { QueryKeys } from "../constans";
 import { getCatsMock } from "../mocks";
 import { useCatstore } from "../store/store";
-import { CatsItemType } from "../types";
+import { CatItemType } from "../types";
 
-export const useQueryCat = (): CatsItemType[] | undefined => {
+export const useQueryCat = (): CatItemType[] | undefined => {
   const [cats, setCats] = useCatstore((state) => [state.cats, state.setCats]);
   const catsMockRef = useRef(getCatsMock(4));
 
-  useQuery<CatsItemType[]>(QueryKeys.getCats, API.getCats, {
+  useQuery<CatItemType[]>(QueryKeys.getCats, API.getCats, {
     onSuccess: (data) => setCats(data),
     enabled: !cats.length,
     initialData: catsMockRef.current,

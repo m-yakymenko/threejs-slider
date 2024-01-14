@@ -41,5 +41,5 @@ const CanvasWrapper = styled.div`
   top: 10vh;
   left: 0;
   right: 0;
-  height: ${({ theme }) => theme.sizes.sliderHeight};
+  height: ${({ theme }) => theme.sizes.sliderHeightVH}vh;
 `;

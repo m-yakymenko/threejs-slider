@@ -1,6 +1,6 @@
-import { CatsItemType } from "./types";
+import { CatItemType } from "./types";
 
-export const getCatsMock = (quantity: number): CatsItemType[] =>
+export const getCatsMock = (quantity: number): CatItemType[] =>
   Array(quantity)
     .fill({
       id: "0",

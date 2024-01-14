@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { CatsItemType, SliderDataType } from "../types";
+import { CatItemType, SliderDataType } from "../types";
 
-interface CatsState {
-  cats: CatsItemType[];
-  setCats: (cats: CatsItemType[]) => void;
+export interface CatsStateInterface {
+  cats: CatItemType[];
+  setCats: (cats: CatItemType[]) => void;
   slider: SliderDataType | null;
   setSlider: (slider: SliderDataType | null) => void;
   showMeshes: boolean;
@@ -13,7 +13,7 @@ interface CatsState {
   setImgRect: (imgRect: DOMRect | null) => void;
 }
 
-export const useCatstore = create<CatsState>()(
+export const useCatstore = create<CatsStateInterface>()(
   devtools(
     persist(
       (set) => ({
