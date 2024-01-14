@@ -22,7 +22,7 @@ export const Header = () => {
         value={showFeDisplacementMap}
         onChange={(event) => setShowFeDisplacementMap(event.target.checked)}
       >
-        Turn FeDisplacementMap
+        FeDisplacementMap
       </Checkbox>
     </Wrapper>
   );
@@ -34,6 +34,14 @@ const Wrapper = styled.header`
   z-index: 1;
   display: flex;
   align-items: center;
-  padding: 20px 10vw;
-  gap: 30px;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 600px) {
+    & {
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+  }
 `;

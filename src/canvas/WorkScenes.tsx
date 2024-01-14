@@ -18,27 +18,40 @@ export const WorkScenes = () => {
   });
 
   return (
-    <group ref={groupRef}>
-      {slider?.slidesGrid.map((slide, index) => (
+    <>
+      <group ref={groupRef} visible={!imgRect}>
+        {slider?.slidesGrid.map((slide, index) => (
+          <WorkScene
+            position={[
+              -window.innerWidth / 2 +
+                slider.slidesSizesGrid[index].width / 2 +
+                slide,
+              getSlideHeight() / 2 -
+                slider.slidesSizesGrid[index].top -
+                slider.slidesSizesGrid[index].height / 2,
+              2,
+            ]}
+            width={slider.slidesSizesGrid[index].width}
+            height={slider.slidesSizesGrid[index].height}
+            key={index}
+            showMeshes={showMeshes}
+            shiftMultiplier={imgRect || showFeDisplacementMap ? 0 : 1}
+            turnOffLight={showFeDisplacementMap}
+          />
+        ))}
+      </group>
+
+      <group visible={!!imgRect}>
         <WorkScene
-          position={[
-            -window.innerWidth / 2 +
-              slider.slidesSizesGrid[index].width / 2 +
-              slide,
-            getSlideHeight() / 2 -
-              slider.slidesSizesGrid[index].top -
-              slider.slidesSizesGrid[index].height / 2,
-            2,
-          ]}
-          width={slider.slidesSizesGrid[index].width}
-          height={slider.slidesSizesGrid[index].height}
-          key={index}
+          position={[Math.abs(state.position), 0, 2]}
+          width={window.innerWidth}
+          height={window.innerHeight}
           showMeshes={showMeshes}
-          shiftMultiplier={imgRect ? 0 : 1}
+          shiftMultiplier={imgRect || showFeDisplacementMap ? 0 : 1}
           turnOffLight={showFeDisplacementMap}
         />
-      ))}
-    </group>
+      </group>
+    </>
   );
 };
 
@@ -186,7 +199,7 @@ const SceneLight = ({
       <pointLight
         position={[position[0], position[1], position[2] + width * 0.9]}
         decay={0}
-        intensity={15}
+        intensity={20}
         castShadow
         color={0xffffff}
         distance={height * 1.2}

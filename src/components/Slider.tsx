@@ -1,6 +1,6 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css/core";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styled, { css } from "styled-components";
 import { regExpFindPositionByPixel } from "../constans";
@@ -109,6 +109,10 @@ const SlideImage = memo(
   }) => {
     const [imgRect, setimgRect] = useState<DOMRect | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const marginTop = useMemo(
+      () => randomIntFromInterval(0, getSlideHeight() / 2),
+      [],
+    );
 
     useEffect(() => {
       setImgRect(imgRect);
@@ -129,7 +133,7 @@ const SlideImage = memo(
           style={{
             opacity: isLoaded ? 1 : 0,
             maxHeight: cat.height,
-            marginTop: randomIntFromInterval(0, getSlideHeight() / 2),
+            marginTop: marginTop,
           }}
           onLoad={() => setIsLoaded(true)}
         />
